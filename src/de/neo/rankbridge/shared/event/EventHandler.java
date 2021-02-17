@@ -1,64 +1,81 @@
 package de.neo.rankbridge.shared.event;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import de.neo.rankbridge.shared.event.events.BridgeEvent;
+import de.neo.rankbridge.shared.event.events.BridgeEventType;
 
 /**
  * The EventHandler fires and listens for a BridgeEvent.
  * 
  * @author Neo8
  * @version 1.0
- * @see de.neo.rankbridge.shared.event.BridgeEvent
+ * @see de.neo.rankbridge.shared.event.events.BridgeEvent
  */
 public class EventHandler {
 	
-	private HashMap<Enum<? extends BridgeEventType>, ArrayList<Class<? extends BridgeEventListener>>> listener;
+	private HashMap<BridgeEventType, ArrayList<BridgeEventListener>> listener;
 	
+	/**
+	 * New EventHandler
+	 */
 	public EventHandler() {
 		this.listener = new HashMap<>();
 	}
 	
-	public void executeEvent(Class<? extends BridgeEvent> event) {
-		BridgeEventType type = BridgeEvent.class.cast(event).getType();
-		
-	}
-	
-	public void registerEvent(Enum<? extends BridgeEventType> event) {
-		this.listener.put(event, new ArrayList<>());
-	}
-	
-	public void unregisterEvent(Enum<? extends BridgeEventType> event) {
-		this.listener.remove(event);
-	}
-	
-	public void registerListener(Class<? extends BridgeEventListener> listener) {
-		if(listener.getMethods().length > 0) {
-			for(Method m : listener.getMethods()) {
-				if(m.isAnnotationPresent(BridgeEventHandler.class) && m.getParameterCount() == 1) {
-					if(m.getParameterTypes()[0].getClass().getPackageName().equals(BridgeEvent.class.getPackageName())) {
-						BridgeEventType type = BridgeEvent.class.cast(m.getParameterTypes()[0].getClass()).getType();
-						ArrayList<Class<? extends BridgeEventListener>> l = this.listener.get(type);
-						l.add(listener);
-						this.listener.put(type, l);
-					}
-				}
-			}
+	/**
+	 * Executes a BridgeEvent.
+	 * 
+	 * @param event The BridgeEvent to execute.
+	 */
+	public void executeEvent(BridgeEvent event) {
+		BridgeEventType type = event.getType();
+		for(BridgeEventListener handler : this.listener.get(type)) {
+			handler.execute(event);
 		}
 	}
 	
-	public void unregisterListener(Class<? extends BridgeEventListener> listener) {
-		if(listener.getMethods().length > 0) {
-			for(Method m : listener.getMethods()) {
-				if(m.isAnnotationPresent(BridgeEventHandler.class) && m.getParameterCount() == 1) {
-					if(m.getParameterTypes()[0].getClass().getPackageName().equals(BridgeEvent.class.getPackageName())) {
-						BridgeEventType type = BridgeEvent.class.cast(m.getParameterTypes()[0].getClass()).getType();
-						ArrayList<Class<? extends BridgeEventListener>> l = this.listener.get(type);
-						l.remove(listener);
-						this.listener.put(type, l);
-					}
-				}
-			}
-		}
+	/**
+	 * Registers a new BridgeEvent.
+	 * The BridgeEvent must be registered so that a Plugin can listen to.
+	 * 
+	 * @param event The BridgeEvent to register.
+	 */
+	public void registerEvent(BridgeEvent event) {
+		this.listener.put(event.getType(), new ArrayList<>());
+	}
+	
+	/**
+	 * Unregisters a BridgeEvent.
+	 * 
+	 * @param event The BridgeEvent to unregister.
+	 */
+	public void unregisterEvent(BridgeEvent event) {
+		this.listener.remove(event.getType());
+	}
+	
+	/**
+	 * Registers a Listener.
+	 * 
+	 * @param event The Event to listen for.
+	 * @param listener The BridgeEventListener instance.
+	 */
+	public void registerListener(BridgeEvent event, BridgeEventListener listener) {
+		ArrayList<BridgeEventListener> l = this.listener.get(event.getType());
+		l.add(listener);
+		this.listener.put(event.getType(), l);
+	}
+	
+	/**
+	 * Unregisters a Listener.
+	 * 
+	 * @param event The Event to stop listen for.
+	 * @param listener The BridgeEventListener instance.
+	 */
+	public void unregisterListener(BridgeEvent event, BridgeEventListener listener) {
+		ArrayList<BridgeEventListener> l = this.listener.get(event.getType());
+		l.remove(listener);
+		this.listener.put(event.getType(), l);
 	}
 }

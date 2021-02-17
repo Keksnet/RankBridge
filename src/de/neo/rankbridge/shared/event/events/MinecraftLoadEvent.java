@@ -2,14 +2,14 @@ package de.neo.rankbridge.shared.event.events;
 
 import de.neo.rankbridge.shared.event.EventSender;
 
-public class BridgeReadyEvent extends BridgeEvent {
+public class MinecraftLoadEvent extends CancellableEvent{
 	
-	public BridgeReadyEvent(EventSender sender) {
+	public MinecraftLoadEvent(EventSender sender) {
 		super(sender);
 	}
 
 	@Override
 	public BridgeEventType getType() {
-		return BridgeEventType.BRIDGE_READY;
+		return BridgeEventType.MINECRAFT_LOAD;
 	}
 }
