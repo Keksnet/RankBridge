@@ -1,6 +1,6 @@
 package de.neo.rankbridge.shared.event.events;
 
-import de.neo.rankbridge.shared.event.EventSender;
+import de.neo.rankbridge.shared.manager.services.BridgeService;
 
 /**
  * The BridgeEvent represents a Event.
@@ -12,25 +12,18 @@ import de.neo.rankbridge.shared.event.EventSender;
  */
 public abstract class BridgeEvent {
 	
-	private EventSender sender;
+	private Class<? extends BridgeService> sender;
 	
-	public BridgeEvent(EventSender sender) {
+	public BridgeEvent(Class<? extends BridgeService> sender) {
 		this.sender = sender;
 	}
-	
-	/**
-	 * Returns the Type of the BridgeEvent.
-	 * 
-	 * @return the type of the BridgeEvent.
-	 */
-	public abstract BridgeEventType getType();
 	
 	/**
 	 * Returns the sender of the Event.
 	 * 
 	 * @return The sender of the BridgeEvent.
 	 */
-	public EventSender getSender() {
+	public Class<? extends BridgeService> getSender() {
 		return this.sender;
 	}
 }

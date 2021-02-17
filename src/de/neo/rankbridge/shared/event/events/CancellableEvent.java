@@ -1,15 +1,23 @@
 package de.neo.rankbridge.shared.event.events;
 
-import de.neo.rankbridge.shared.event.EventSender;
+import de.neo.rankbridge.shared.manager.services.BridgeService;
 
+/**
+ * Respresents a BridgeEvent that can cancelled.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public abstract class CancellableEvent extends BridgeEvent{
 	
 	private Boolean cancelled;
 	
 	/**
 	 * New CancellableEvent.
+	 * 
+	 * @param sender EventSender
 	 */
-	public CancellableEvent(EventSender sender) {
+	public CancellableEvent(Class<? extends BridgeService> sender) {
 		super(sender);
 		this.cancelled = false;
 	}
@@ -31,7 +39,4 @@ public abstract class CancellableEvent extends BridgeEvent{
 	public void setCancelled(Boolean cancelled) {
 		this.cancelled = cancelled;
 	}
-
-	@Override
-	public abstract BridgeEventType getType();
 }

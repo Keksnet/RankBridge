@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.neo.rankbridge.shared.event.events.BridgeEvent;
-import de.neo.rankbridge.shared.event.events.BridgeEventType;
 
 /**
  * The EventHandler fires and listens for a BridgeEvent.
@@ -15,7 +14,7 @@ import de.neo.rankbridge.shared.event.events.BridgeEventType;
  */
 public class EventHandler {
 	
-	private HashMap<BridgeEventType, ArrayList<BridgeEventListener>> listener;
+	private HashMap<Class<? extends BridgeEvent>, ArrayList<BridgeEventListener>> listener;
 	
 	/**
 	 * New EventHandler
@@ -30,8 +29,7 @@ public class EventHandler {
 	 * @param event The BridgeEvent to execute.
 	 */
 	public void executeEvent(BridgeEvent event) {
-		BridgeEventType type = event.getType();
-		for(BridgeEventListener handler : this.listener.get(type)) {
+		for(BridgeEventListener handler : this.listener.get(event.getClass())) {
 			handler.execute(event);
 		}
 	}
@@ -42,8 +40,8 @@ public class EventHandler {
 	 * 
 	 * @param event The BridgeEvent to register.
 	 */
-	public void registerEvent(BridgeEvent event) {
-		this.listener.put(event.getType(), new ArrayList<>());
+	public void registerEvent(Class<? extends BridgeEvent> event) {
+		this.listener.put(event, new ArrayList<>());
 	}
 	
 	/**
@@ -51,8 +49,8 @@ public class EventHandler {
 	 * 
 	 * @param event The BridgeEvent to unregister.
 	 */
-	public void unregisterEvent(BridgeEvent event) {
-		this.listener.remove(event.getType());
+	public void unregisterEvent(Class<? extends BridgeEvent> event) {
+		this.listener.remove(event);
 	}
 	
 	/**
@@ -61,10 +59,10 @@ public class EventHandler {
 	 * @param event The Event to listen for.
 	 * @param listener The BridgeEventListener instance.
 	 */
-	public void registerListener(BridgeEvent event, BridgeEventListener listener) {
-		ArrayList<BridgeEventListener> l = this.listener.get(event.getType());
+	public void registerListener(Class<? extends BridgeEvent> event, BridgeEventListener listener) {
+		ArrayList<BridgeEventListener> l = this.listener.get(event);
 		l.add(listener);
-		this.listener.put(event.getType(), l);
+		this.listener.put(event, l);
 	}
 	
 	/**
@@ -73,9 +71,9 @@ public class EventHandler {
 	 * @param event The Event to stop listen for.
 	 * @param listener The BridgeEventListener instance.
 	 */
-	public void unregisterListener(BridgeEvent event, BridgeEventListener listener) {
-		ArrayList<BridgeEventListener> l = this.listener.get(event.getType());
+	public void unregisterListener(Class<? extends BridgeEvent> event, BridgeEventListener listener) {
+		ArrayList<BridgeEventListener> l = this.listener.get(event);
 		l.remove(listener);
-		this.listener.put(event.getType(), l);
+		this.listener.put(event, l);
 	}
 }

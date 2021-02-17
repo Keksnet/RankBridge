@@ -1,17 +1,13 @@
 package de.neo.rankbridge.shared.event.events;
 
+import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.manager.services.BridgeService;
 
-public class MinecraftLoadEvent extends CancellableEvent{
-	
-	public enum MinecraftType {
-		SPIGOT,
-		BUNGEECORD
-	}
+public class MinecraftReadyEvent extends BridgeEvent{
 	
 	private MinecraftType minecraftType;
-	
-	public MinecraftLoadEvent(Class<? extends BridgeService> sender, MinecraftType type) {
+
+	public MinecraftReadyEvent(Class<? extends BridgeService> sender, MinecraftType type) {
 		super(sender);
 		this.minecraftType = type;
 	}
