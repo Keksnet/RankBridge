@@ -3,6 +3,7 @@ package de.neo.rankbridge.minecraft.bungeecord;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import de.neo.rankbridge.SyncService;
@@ -12,6 +13,7 @@ import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftReadyEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.manager.GlobalManager;
+import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -39,6 +41,9 @@ public class BungeeMain extends Plugin{
 		if(this.config.getBoolean("discord.enable")) {
 			new DiscordMain();
 		}
+		if(this.config.getBoolean("teamspeak.enable")) {
+			new TeamSpeakMain();
+		}
 		/* Start Plugin */
 		
 		MinecraftReadyEvent readyEvent = new MinecraftReadyEvent(BungeeService.class, MinecraftType.BUNGEECORD);
@@ -65,6 +70,20 @@ public class BungeeMain extends Plugin{
 				this.config.set("discord.enable", false);
 				this.config.set("discord.token", "BOT_TOKEN_HERE");
 				this.config.set("discord.activity", "verifing players");
+				HashMap<String, Long> discord_group = new HashMap<>();
+				discord_group.put("group.admin", 0l);
+				this.config.set("discord.groups", discord_group);
+				
+				this.config.set("teamspeak.enable", false);
+				this.config.set("teamspeak.user", "username");
+				this.config.set("teamspeak.password", "password");
+				this.config.set("teamspeak.host", "127.0.0.1");
+				this.config.set("teamspeak.port", 10011);
+				this.config.set("teamspeak.vserver", 1);
+				this.config.set("teamspeak.nickname", "Verify Bot");
+				HashMap<String, Integer> teamspeak_group = new HashMap<>();
+				teamspeak_group.put("group.admin", 6);
+				this.config.set("teamspeak.groups", teamspeak_group);
 				ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.config, f);
 				getProxy().getLogger().log(Level.WARNING, "config generated.");
 			}

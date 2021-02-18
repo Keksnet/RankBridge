@@ -37,6 +37,7 @@ public class DiscordMain extends BridgeService {
 			if(loadEvent.isCancelled()) {
 				return;
 			}
+			manager.getServiceManager().register(this);
 			if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
 				MinecraftService mcService = (MinecraftService) manager.getServiceManager().getService(MinecraftService.class);
 				String TOKEN = "";
