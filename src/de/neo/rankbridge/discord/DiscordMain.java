@@ -1,5 +1,7 @@
 package de.neo.rankbridge.discord;
 
+import java.util.EnumSet;
+
 import javax.security.auth.login.LoginException;
 
 import org.slf4j.Logger;
@@ -51,7 +53,7 @@ public class DiscordMain extends BridgeService {
 				JDABuilder builder = JDABuilder.createDefault(TOKEN);
 				builder.setActivity(Activity.playing(activity));
 				builder.setStatus(OnlineStatus.ONLINE);
-				builder.setEnabledIntents(GatewayIntent.GUILD_MEMBERS);
+				builder.setEnabledIntents(EnumSet.allOf(GatewayIntent.class));
 				builder.setMemberCachePolicy(MemberCachePolicy.ALL);
 				jda = builder.build();
 			}

@@ -19,14 +19,25 @@
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.2.4</version>
         <configuration>
-        	<filters>
-        		<filter>
-        			<artifact>net:dv8tion:JDA</artifact>
-        			<includes>
-        				<include>**</include>
-        			</includes>
-        		</filter>
-        	</filters>
+        	<minimizeJar>true</minimizeJar>
+        	<transformers>
+        		<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+        			<resource>bungee_config.yml</resource>
+        			<file>bungee_config.yml</file>
+        		</transformer>
+        		<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+        			<resource>bungee.yml</resource>
+        			<file>bungee.yml</file>
+        		</transformer>
+        		<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+        			<resource>plugin.yml</resource>
+        			<file>plugin.yml</file>
+        		</transformer>
+        		<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+        			<resource>spigot_config.yml</resource>
+        			<file>spigot_config.yml</file>
+        		</transformer>
+        	</transformers>
         </configuration>
         <executions>
           <execution>
