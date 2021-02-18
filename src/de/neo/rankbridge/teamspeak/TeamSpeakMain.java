@@ -1,5 +1,8 @@
 package de.neo.rankbridge.teamspeak;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.configuration.file.FileConfiguration;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
@@ -13,11 +16,18 @@ import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.minecraft.spigot.SpigotService;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.event.events.TeamSpeakLoadEvent;
+import de.neo.rankbridge.shared.event.events.TeamSpeakReadyEvent;
+import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
 import de.neo.rankbridge.shared.manager.GlobalManager;
 import de.neo.rankbridge.shared.manager.services.BridgeService;
+import de.neo.rankbridge.shared.util.MultiVar;
+import de.neo.rankbridge.teamspeak.listener.MessageSendListener;
 import net.md_5.bungee.config.Configuration;
 
 public class TeamSpeakMain extends BridgeService {
+	
+	private TS3ApiAsync api;
+	private HashMap<String, MultiVar> codes = new HashMap<>();
 	
 	public TeamSpeakMain() {
 		super("TeamSpeakBot");
@@ -56,6 +66,7 @@ public class TeamSpeakMain extends BridgeService {
 				nickname = config.getString("teamspeak.nickname");
 				port = config.getInt("teamspeak.port");
 			}
+			manager.getEventHandler().registerListener(BridgeMessageSendEvent.class, new MessageSendListener());
 			try {
 				TS3Config config = new TS3Config();
 				config.setHost(host);
@@ -69,9 +80,23 @@ public class TeamSpeakMain extends BridgeService {
 				api.selectVirtualServerById(vserver).await();
 				api.setNickname(nickname).await();
 				api.sendChannelMessage(nickname + " is online!");
+				TeamSpeakReadyEvent readyEvent = new TeamSpeakReadyEvent(TeamSpeakMain.class);
+				manager.getEventHandler().executeEvent(readyEvent);
 			}catch(InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void addCode(String code, Integer group, UUID uuid) {
+		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString()));
+	}
+	
+	public void removeCode(String code) {
+		this.codes.remove(code);
+	}
+	
+	public TS3ApiAsync getAPI() {
+		return this.api;
 	}
 }

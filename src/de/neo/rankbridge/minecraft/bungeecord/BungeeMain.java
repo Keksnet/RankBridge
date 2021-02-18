@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import de.neo.rankbridge.SyncService;
 import de.neo.rankbridge.discord.DiscordMain;
 import de.neo.rankbridge.minecraft.MinecraftService;
+import de.neo.rankbridge.minecraft.bungeecord.cmd.BungeeVerify;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftReadyEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
@@ -44,7 +45,8 @@ public class BungeeMain extends Plugin{
 		if(this.config.getBoolean("teamspeak.enable")) {
 			new TeamSpeakMain();
 		}
-		/* Start Plugin */
+		
+		getProxy().getPluginManager().registerCommand(this, new BungeeVerify());
 		
 		MinecraftReadyEvent readyEvent = new MinecraftReadyEvent(BungeeService.class, MinecraftType.BUNGEECORD);
 		manager.getEventHandler().executeEvent(readyEvent);
@@ -70,6 +72,7 @@ public class BungeeMain extends Plugin{
 				this.config.set("discord.enable", false);
 				this.config.set("discord.token", "BOT_TOKEN_HERE");
 				this.config.set("discord.activity", "verifing players");
+				this.config.set("discord.guild", 0l);
 				HashMap<String, Long> discord_group = new HashMap<>();
 				discord_group.put("group.admin", 0l);
 				this.config.set("discord.groups", discord_group);
