@@ -1,0 +1,5 @@
+name: RankBridge_Spigot
+version: 1.0
+api-version: 1.16
+author: Neo8
+main: de.neo.rankbridge.minecraft.spigot.SpigotMain
