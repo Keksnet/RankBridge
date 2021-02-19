@@ -17,6 +17,7 @@ import de.neo.rankbridge.shared.util.MultiVar;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.md_5.bungee.config.Configuration;
 
@@ -48,7 +49,12 @@ public class MessageReceivedListener extends ListenerAdapter {
 					}
 					Guild g = main.getJDA().getGuildById(guild);
 					g.addRoleToMember(g.getMember(e.getAuthor()), g.getRoleById(vars.get(0))).queue();
-					main.getJDA().openPrivateChannelById(e.getAuthor().getId()).complete().sendMessage(":white_check_mark: successful verified with ```" + vars.get(1) + "``` :white_check_mark:").queue();
+					try {
+						main.getJDA().openPrivateChannelById(e.getAuthor().getId()).complete().sendMessage(":white_check_mark: successful verified with " + vars.get(1) + " :white_check_mark:").complete();
+					}catch(ErrorResponseException e1) {
+						//nothing.
+					}
+					main.removeCode(code);
 					BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
 					msg.setContent("VERIFIED;" + code + ";" + e.getAuthor().getId());
 					BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(DiscordMain.class, msg);

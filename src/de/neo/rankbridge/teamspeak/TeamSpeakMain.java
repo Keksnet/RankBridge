@@ -22,6 +22,7 @@ import de.neo.rankbridge.shared.manager.GlobalManager;
 import de.neo.rankbridge.shared.manager.services.BridgeService;
 import de.neo.rankbridge.shared.util.MultiVar;
 import de.neo.rankbridge.teamspeak.listener.MessageSendListener;
+import de.neo.rankbridge.teamspeak.listener.TSListener;
 import net.md_5.bungee.config.Configuration;
 
 public class TeamSpeakMain extends BridgeService {
@@ -79,7 +80,8 @@ public class TeamSpeakMain extends BridgeService {
 				api.login(user, password).await();
 				api.selectVirtualServerById(vserver).await();
 				api.setNickname(nickname).await();
-				api.sendChannelMessage(nickname + " is online!");
+				System.out.println("TeamSpeakBot is online!");
+				api.addTS3Listeners(new TSListener());
 				TeamSpeakReadyEvent readyEvent = new TeamSpeakReadyEvent(TeamSpeakMain.class);
 				manager.getEventHandler().executeEvent(readyEvent);
 			}catch(InterruptedException e) {

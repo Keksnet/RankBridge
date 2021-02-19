@@ -34,7 +34,7 @@ public class MessageSendListener implements BridgeEventListener {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 5) {
 				String code = args[1];
-				Integer group = Integer.getInteger(args[2]);
+				Integer group = Integer.valueOf(args[2]);
 				UUID uuid = UUID.fromString(args[4]);
 				service.addCode(code, group, uuid);
 				GlobalManager.getInstance().getEventHandler().executeEvent(receivedEvent);
