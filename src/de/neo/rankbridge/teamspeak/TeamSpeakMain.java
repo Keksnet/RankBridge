@@ -99,6 +99,23 @@ public class TeamSpeakMain extends BridgeService {
 		this.codes.remove(code);
 	}
 	
+	public String getString(String path) {
+		GlobalManager manager = GlobalManager.getInstance();
+		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
+			MinecraftService mcService = (MinecraftService) manager.getServiceManager().getService(MinecraftService.class);
+			if(mcService.getMinecraftType().equals(MinecraftType.SPIGOT)) {
+				SpigotService spigot = (SpigotService) manager.getServiceManager().getService(SpigotService.class);
+				FileConfiguration config = spigot.getMain().getConfig();
+				return config.getString(path);
+			}else if(mcService.getMinecraftType().equals(MinecraftType.BUNGEECORD)) {
+				BungeeMain bungee = (BungeeMain) manager.getServiceManager().getService(BungeeService.class).getExternalService().getMain();
+				Configuration config = bungee.getConfig();
+				return config.getString(path);
+			}
+		}
+		return null;
+	}
+	
 	public TS3ApiAsync getAPI() {
 		return this.api;
 	}

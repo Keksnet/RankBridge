@@ -1,8 +1,5 @@
 package de.neo.rankbridge.teamspeak.listener;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.theholywaffle.teamspeak3.api.event.ChannelCreateEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ChannelDeletedEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ChannelDescriptionEditedEvent;
@@ -16,22 +13,34 @@ import com.github.theholywaffle.teamspeak3.api.event.PrivilegeKeyUsedEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ServerEditedEvent;
 import com.github.theholywaffle.teamspeak3.api.event.TS3Listener;
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
+import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
+import de.neo.rankbridge.shared.manager.GlobalManager;
+import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
 public class TSListener implements TS3Listener {
 	
-	private Logger l;
+	private TeamSpeakMain main;
 	
 	public TSListener() {
-		this.l = LoggerFactory.getLogger("TSBot");
+		this.main = (TeamSpeakMain) GlobalManager.getInstance().getServiceManager().getService(TeamSpeakMain.class);
 	}
 
 	@Override
 	public void onTextMessage(TextMessageEvent e) {
+		/* Coming soon! */
 	}
 
 	@Override
 	public void onClientJoin(ClientJoinEvent e) {
-		l.warn(e.getClientServerGroups());
+		if(!e.getClientServerGroups().contains(this.main.getString("teamspeak.verified_group"))) {
+			try {
+				Client client = this.main.getAPI().getClientByUId(e.getUniqueClientIdentifier()).get();
+				this.main.getAPI().sendPrivateMessage(client.getId(), this.main.getString("messages.teamspeak.verify_info"));
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
 	}
 
 	@Override
