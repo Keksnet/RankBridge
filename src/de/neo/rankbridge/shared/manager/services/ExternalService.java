@@ -18,6 +18,7 @@ public abstract class ExternalService<T> extends BridgeService{
 	 */
 	public ExternalService(String name, T main) {
 		super(name, true);
+		super.setExternalService(this);
 		this.main = main;
 	}
 	

@@ -25,14 +25,24 @@ public abstract class BridgeService {
 	/**
 	 * New BridgeService.
 	 * 
-	 * @param <V> the Type of the ExternalService.
 	 * @param name the name of the service.
-	 * @param externalService the ExternalService.
+	 * @param isExternal Boolean whether the Service is handled external or not.
 	 */
-	public <V> BridgeService(String name, Boolean isExternal) {
+	public BridgeService(String name, Boolean isExternal) {
 		this.name = name;
 		this.externalHandler = isExternal;
-		this.externalService = ExternalService.class.cast(this.getClass().getClassLoader().getClass());
+	}
+	
+	/**
+	 * Sets the ExternalHandler.
+	 * 
+	 * @param <V> the Type of the ExternalService.
+	 * @param externalService the ExternalService.
+	 */
+	protected <V> void setExternalService(ExternalService<V> externalService) {
+		if(this.externalHandler) {
+			this.externalService = externalService;
+		}
 	}
 	
 	/**
