@@ -17,7 +17,7 @@ public abstract class ExternalService<T> extends BridgeService{
 	 * @param main The main instance for the service.
 	 */
 	public ExternalService(String name, T main) {
-		super(name);
+		super(name, true);
 		this.main = main;
 	}
 	

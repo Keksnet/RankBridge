@@ -25,7 +25,6 @@ public class BungeeVerify extends Command {
 		super("verify", "system.verify", new String[] {"verify-ts", "verify-dc"});
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if(sender instanceof ProxiedPlayer) {
@@ -37,7 +36,7 @@ public class BungeeVerify extends Command {
 			GlobalManager manager = GlobalManager.getInstance();
 			BridgeServiceManager services = manager.getServiceManager();
 			BridgeService service = (BridgeService) services.getService(BungeeService.class);
-			ExternalService<Plugin> ext = (ExternalService<Plugin>) service.getExternalService();
+			ExternalService<?> ext = service.getExternalService();
 			BungeeMain main = (BungeeMain) ext.getMain();
 			for(Entry<Object, Object> val : main.getConfig().get("teamspeak.groups", new HashMap<>()).entrySet()) {
 				String k = (String) val.getKey();

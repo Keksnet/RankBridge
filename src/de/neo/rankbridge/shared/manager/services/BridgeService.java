@@ -29,10 +29,10 @@ public abstract class BridgeService {
 	 * @param name the name of the service.
 	 * @param externalService the ExternalService.
 	 */
-	public <V> BridgeService(String name, ExternalService<V> externalService) {
+	public <V> BridgeService(String name, Boolean isExternal) {
 		this.name = name;
-		this.externalHandler = true;
-		this.externalService = externalService;
+		this.externalHandler = isExternal;
+		this.externalService = ExternalService.class.cast(this.getClass().getClassLoader().getClass());
 	}
 	
 	/**
