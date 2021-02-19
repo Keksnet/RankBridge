@@ -73,7 +73,7 @@ public class DiscordMain extends BridgeService {
 			}
 		}catch(LoginException e) {
 			Logger logger = LoggerFactory.getLogger("Discord");
-			logger.error("please chekc your discord token.");
+			logger.error("please check your discord token.");
 		}
 	}
 	

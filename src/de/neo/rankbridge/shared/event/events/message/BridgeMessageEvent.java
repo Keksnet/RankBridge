@@ -1,6 +1,6 @@
 package de.neo.rankbridge.shared.event.events.message;
 
-import de.neo.rankbridge.shared.event.events.CancellableEvent;
+import de.neo.rankbridge.shared.event.events.BridgeEvent;
 import de.neo.rankbridge.shared.manager.services.BridgeService;
 import de.neo.rankbridge.shared.message.BridgeMessage;
 
@@ -10,7 +10,7 @@ import de.neo.rankbridge.shared.message.BridgeMessage;
  * @author Neo8
  * @version 1.0
  */
-public abstract class BridgeMessageEvent extends CancellableEvent{
+public abstract class BridgeMessageEvent extends BridgeEvent{
 	
 	private BridgeMessage<?> message;
 	
