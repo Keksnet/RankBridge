@@ -1,5 +1,8 @@
 package de.neo.rankbridge.teamspeak.listener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.theholywaffle.teamspeak3.api.event.ChannelCreateEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ChannelDeletedEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ChannelDescriptionEditedEvent;
@@ -15,6 +18,12 @@ import com.github.theholywaffle.teamspeak3.api.event.TS3Listener;
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 
 public class TSListener implements TS3Listener {
+	
+	private Logger l;
+	
+	public TSListener() {
+		this.l = LoggerFactory.getLogger("TSBot");
+	}
 
 	@Override
 	public void onTextMessage(TextMessageEvent e) {
@@ -22,7 +31,7 @@ public class TSListener implements TS3Listener {
 
 	@Override
 	public void onClientJoin(ClientJoinEvent e) {
-		System.out.println(e.getClientServerGroups());
+		l.warn(e.getClientServerGroups());
 	}
 
 	@Override
