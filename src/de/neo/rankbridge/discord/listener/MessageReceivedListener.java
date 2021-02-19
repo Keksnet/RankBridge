@@ -26,16 +26,13 @@ public class MessageReceivedListener extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent e) {
 		if(e.getChannelType().equals(ChannelType.PRIVATE)) {
-			System.out.println("msg");
 			GlobalManager manager = GlobalManager.getInstance();
 			BridgeServiceManager services = manager.getServiceManager();
 			DiscordMain main = (DiscordMain) services.getService(DiscordMain.class);
 			String code = e.getMessage().getContentRaw();
 			MultiVar vars = main.getCode(code);
 			if(vars != null) {
-				System.out.println("vars");
 				if(services.isServiceRegistered(MinecraftService.class)) {
-					System.out.println("durch");
 					MinecraftService mcService = (MinecraftService) services.getService(MinecraftService.class);
 					Long guild = 0l;
 					if(mcService.getMinecraftType().equals(MinecraftType.SPIGOT)) {
