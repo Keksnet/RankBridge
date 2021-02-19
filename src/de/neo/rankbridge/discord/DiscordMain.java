@@ -78,11 +78,16 @@ public class DiscordMain extends BridgeService {
 	}
 	
 	public void addCode(String code, Integer group, UUID uuid) {
+		System.out.println("Registered Code: " + code);
 		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString()));
 	}
 	
 	public MultiVar getCode(String code) {
-		return this.codes.get(code.replace(" ", ""));
+		if(this.codes.containsKey(code.replace(" ", ""))) {
+			return this.codes.get(code.replace(" ", ""));
+		}else {
+			return null;
+		}
 	}
 	
 	public void removeCode(String code) {
