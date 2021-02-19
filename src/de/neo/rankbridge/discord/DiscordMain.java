@@ -78,7 +78,8 @@ public class DiscordMain extends BridgeService {
 	}
 	
 	public void addCode(String code, Integer group, UUID uuid) {
-		System.out.println("Registered Code: " + code);
+		Logger l = LoggerFactory.getLogger("debug");
+		l.warn("Registered Code: " + code);
 		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString()));
 	}
 	
