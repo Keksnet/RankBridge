@@ -42,6 +42,8 @@ public class MessageSendListener implements BridgeEventListener {
 		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE-")) {
 			l.warn("8");
 			String[] args = e.getMessage().getContentUniversal().getAsString().split("-");
+			l.warn(e.getMessage().getContentUniversal().getAsString());
+			l.warn(args.toString());
 			if(args.length == 5) {
 				l.warn("9");
 				String code = args[1];
