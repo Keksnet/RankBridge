@@ -25,13 +25,16 @@ public class MessageReceivedListener extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent e) {
 		if(e.getChannelType().equals(ChannelType.PRIVATE)) {
+			System.out.println("msg");
 			GlobalManager manager = GlobalManager.getInstance();
 			BridgeServiceManager services = manager.getServiceManager();
 			DiscordMain main = (DiscordMain) services.getService(DiscordMain.class);
 			String code = e.getMessage().getContentRaw();
 			MultiVar vars = main.getCode(code);
 			if(vars != null) {
+				System.out.println("vars");
 				if(services.isServiceRegistered(MinecraftService.class)) {
+					System.out.println("durch");
 					MinecraftService mcService = (MinecraftService) services.getService(MinecraftService.class);
 					Long guild = 0l;
 					if(mcService.getMinecraftType().equals(MinecraftType.SPIGOT)) {
@@ -45,6 +48,7 @@ public class MessageReceivedListener extends ListenerAdapter {
 					}
 					Guild g = main.getJDA().getGuildById(guild);
 					g.addRoleToMember(e.getMember(), g.getRoleById(vars.get(0))).queue();
+					main.getJDA().openPrivateChannelById(e.getAuthor().getId()).complete().sendMessage(":white_check_mark: successful verified with ```" + vars.get(1) + "``` :white_check_mark:").queue();
 					BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
 					msg.setContent("VERIFIED-" + code + "-" + e.getAuthor().getId());
 					BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(DiscordMain.class, msg);
