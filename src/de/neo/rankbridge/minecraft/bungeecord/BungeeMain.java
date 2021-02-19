@@ -3,7 +3,7 @@ package de.neo.rankbridge.minecraft.bungeecord;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 import de.neo.rankbridge.SyncService;
@@ -73,8 +73,8 @@ public class BungeeMain extends Plugin{
 				this.config.set("discord.token", "BOT_TOKEN_HERE");
 				this.config.set("discord.activity", "verifing players");
 				this.config.set("discord.guild", 0l);
-				HashMap<String, Long> discord_group = new HashMap<>();
-				discord_group.put("group.admin", 0l);
+				ArrayList<String> discord_group = new ArrayList<>();
+				discord_group.add("group.admin, 0");
 				this.config.set("discord.groups", discord_group);
 				
 				this.config.set("teamspeak.enable", false);
@@ -84,8 +84,8 @@ public class BungeeMain extends Plugin{
 				this.config.set("teamspeak.port", 10011);
 				this.config.set("teamspeak.vserver", 1);
 				this.config.set("teamspeak.nickname", "Verify Bot");
-				HashMap<String, Integer> teamspeak_group = new HashMap<>();
-				teamspeak_group.put("group.admin", 6);
+				ArrayList<String> teamspeak_group = new ArrayList<>();
+				teamspeak_group.add("group.admin, 6");
 				this.config.set("teamspeak.groups", teamspeak_group);
 				ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.config, f);
 				getProxy().getLogger().log(Level.WARNING, "config generated.");

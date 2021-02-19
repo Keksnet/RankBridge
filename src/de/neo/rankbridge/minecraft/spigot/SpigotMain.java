@@ -3,8 +3,7 @@ package de.neo.rankbridge.minecraft.spigot;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
-
+import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,8 +53,9 @@ public class SpigotMain extends JavaPlugin {
 				config.set("discord.enable", false);
 				config.set("discord.token", "BOT_TOKEN_HERE");
 				config.set("discord.activity", "verifing players");
-				HashMap<String, Long> discord_group = new HashMap<>();
-				discord_group.put("group.admin", 0l);
+				config.set("discord.guild", 0l);
+				ArrayList<String> discord_group = new ArrayList<>();
+				discord_group.add("group.admin, 0");
 				config.set("discord.groups", discord_group);
 				
 				config.set("teamspeak.enable", false);
@@ -65,8 +65,8 @@ public class SpigotMain extends JavaPlugin {
 				config.set("teamspeak.port", 10011);
 				config.set("teamspeak.vserver", 1);
 				config.set("teamspeak.nickname", "Verify Bot");
-				HashMap<String, Integer> teamspeak_group = new HashMap<>();
-				teamspeak_group.put("group.admin", 6);
+				ArrayList<String> teamspeak_group = new ArrayList<>();
+				teamspeak_group.add("group.admin, 6");
 				config.set("teamspeak.groups", teamspeak_group);
 				Bukkit.getPluginManager().disablePlugin(this);
 				System.out.println("Bitte füllen sie die Config aus.");

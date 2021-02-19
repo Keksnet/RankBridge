@@ -1,7 +1,6 @@
 package de.neo.rankbridge.minecraft.bungeecord.cmd;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
@@ -24,6 +23,7 @@ public class BungeeVerify extends Command {
 		super("verify", "system.verify", new String[] {"verify-ts", "verify-dc"});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if(sender instanceof ProxiedPlayer) {
@@ -37,16 +37,16 @@ public class BungeeVerify extends Command {
 			BridgeService service = (BridgeService) services.getService(BungeeService.class);
 			ExternalService<?> ext = service.getExternalService();
 			BungeeMain main = (BungeeMain) ext.getMain();
-			for(Entry<Object, Object> val : main.getConfig().get("teamspeak.groups", new HashMap<>()).entrySet()) {
-				String k = (String) val.getKey();
-				String v = (String) val.getValue();
+			for(String val : (ArrayList<String>) main.getConfig().getList("teamspeak.groups")) {
+				String k = (String) val.split(",")[0];
+				String v = (String) val.split(",")[1].replace(" ", "");
 				if(p.hasPermission(k)) {
 					groupTS = Integer.getInteger(v);
 				}
 			}
-			for(Entry<Object, Object> val : main.getConfig().get("discord.groups", new HashMap<>()).entrySet()) {
-				String k = (String) val.getKey();
-				String v = (String) val.getValue();
+			for(String val : (ArrayList<String>) main.getConfig().getList("teamspeak.groups")) {
+				String k = (String) val.split(",")[0];
+				String v = (String) val.split(",")[1].replace(" ", "");
 				if(p.hasPermission(k)) {
 					groupDC = Long.valueOf(v);
 				}
