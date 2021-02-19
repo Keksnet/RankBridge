@@ -32,10 +32,10 @@ public class MessageSendListener implements BridgeEventListener {
 		BridgeMessageReceivedEvent receivedEvent = new BridgeMessageReceivedEvent(TeamSpeakMain.class, e.getMessage());
 		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE-")) {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split("-");
-			if(args.length == 4) {
+			if(args.length == 5) {
 				String code = args[1];
 				Integer group = Integer.getInteger(args[2]);
-				UUID uuid = UUID.fromString(args[3]);
+				UUID uuid = UUID.fromString(args[4]);
 				service.addCode(code, group, uuid);
 				GlobalManager.getInstance().getEventHandler().executeEvent(receivedEvent);
 			}
