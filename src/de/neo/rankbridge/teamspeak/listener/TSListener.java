@@ -15,6 +15,7 @@ import com.github.theholywaffle.teamspeak3.api.event.TS3Listener;
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.neo.rankbridge.shared.manager.GlobalManager;
+import de.neo.rankbridge.shared.util.MultiVar;
 import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
 public class TSListener implements TS3Listener {
@@ -27,7 +28,17 @@ public class TSListener implements TS3Listener {
 
 	@Override
 	public void onTextMessage(TextMessageEvent e) {
-		/* Coming soon! */
+		MultiVar vars = this.main.getCode(e.getMessage().replace(" ", ""));
+		if(vars != null) {
+			try {
+				Client c = this.main.getAPI().getClientByUId(e.getInvokerUniqueId()).get();
+				this.main.getAPI().addClientToServerGroup(Integer.valueOf(vars.get(0)), c.getDatabaseId());
+				this.main.getAPI().addClientToServerGroup(Integer.valueOf(this.main.getString("teamspeak.verified_group")), c.getDatabaseId());
+				this.main.getAPI().sendPrivateMessage(c.getId(), "Du wurdest erfolgreich mit " + vars.get(1) + " verifiziert.");
+			}catch(InterruptedException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	@Override

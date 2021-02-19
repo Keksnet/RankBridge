@@ -95,6 +95,15 @@ public class TeamSpeakMain extends BridgeService {
 		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString()));
 	}
 	
+	public MultiVar getCode(String code) {
+		MultiVar var = this.codes.get(code);
+		if(var != null) {
+			return var;
+		}else {
+			return null;
+		}
+	}
+	
 	public void removeCode(String code) {
 		this.codes.remove(code);
 	}
