@@ -31,8 +31,9 @@ public class MessageSendListener implements BridgeEventListener {
 		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE;")) {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 5) {
+				System.out.println(e.getMessage().getContentUniversal().getAsString());
 				String code = args[1];
-				Integer group = Integer.getInteger(args[3]);
+				Long group = Long.valueOf(args[3]);
 				UUID uuid = UUID.fromString(args[4]);
 				service.addCode(code, group, uuid);
 			}

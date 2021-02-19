@@ -77,7 +77,7 @@ public class DiscordMain extends BridgeService {
 		}
 	}
 	
-	public void addCode(String code, Integer group, UUID uuid) {
+	public void addCode(String code, Long group, UUID uuid) {
 		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString()));
 	}
 	
