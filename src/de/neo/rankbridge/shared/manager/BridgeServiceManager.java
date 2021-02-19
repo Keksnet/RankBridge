@@ -14,7 +14,7 @@ public class BridgeServiceManager {
 	
 	public void register(BridgeService service) {
 		this.services.put(service.getClass(), service);
-		System.out.println("[ServiceManager] Registered Service: " + service.getServiceName());
+		System.out.println("[ServiceManager] Registered Service: " + service.getServiceName() + "(" + service.getClass().getName() + ")");
 	}
 	
 	public void unregister(Class<? extends BridgeService> service) {

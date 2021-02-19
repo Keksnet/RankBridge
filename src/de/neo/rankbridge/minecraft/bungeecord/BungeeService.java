@@ -5,8 +5,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeService extends ExternalService<Plugin> {
 
-	public BungeeService(BungeeMain main) {
-		super("Bungee-" + main.getProxy().getVersion(), main);
+	public BungeeService(Plugin p) {
+		super("Bungee-" + p.getProxy().getVersion(), p);
 	}
 
 }
