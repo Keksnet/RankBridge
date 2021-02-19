@@ -2,12 +2,12 @@ package de.neo.rankbridge.discord.listener;
 
 import java.util.UUID;
 
+import de.neo.rankbridge.discord.DiscordMain;
 import de.neo.rankbridge.shared.event.BridgeEventListener;
 import de.neo.rankbridge.shared.event.events.BridgeEvent;
 import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
 import de.neo.rankbridge.shared.manager.GlobalManager;
 import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
-import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
 public class MessageSendListener implements BridgeEventListener {
 	
@@ -27,7 +27,7 @@ public class MessageSendListener implements BridgeEventListener {
 		if(!allowed) {
 			return;
 		}
-		TeamSpeakMain service = (TeamSpeakMain) GlobalManager.getInstance().getServiceManager().getService(TeamSpeakMain.class);
+		DiscordMain service = (DiscordMain) GlobalManager.getInstance().getServiceManager().getService(DiscordMain.class);
 		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE-")) {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split("-");
 			if(args.length == 5) {
