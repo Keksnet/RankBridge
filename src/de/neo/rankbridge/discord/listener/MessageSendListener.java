@@ -39,9 +39,9 @@ public class MessageSendListener implements BridgeEventListener {
 		}
 		l.warn("7");
 		DiscordMain service = (DiscordMain) GlobalManager.getInstance().getServiceManager().getService(DiscordMain.class);
-		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE-")) {
+		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE;")) {
 			l.warn("8");
-			String[] args = e.getMessage().getContentUniversal().getAsString().split("-");
+			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			l.warn(e.getMessage().getContentUniversal().getAsString());
 			l.warn(args.toString());
 			if(args.length == 5) {
@@ -52,9 +52,9 @@ public class MessageSendListener implements BridgeEventListener {
 				service.addCode(code, group, uuid);
 			}
 			l.warn("10");
-		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("VERIFIED-")) {
+		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("VERIFIED;")) {
 			l.warn("11");
-			String[] args = e.getMessage().getContentUniversal().getAsString().split("-");
+			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 3) {
 				l.warn("12");
 				String code = args[1];

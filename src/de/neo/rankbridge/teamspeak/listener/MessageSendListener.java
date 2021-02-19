@@ -30,8 +30,8 @@ public class MessageSendListener implements BridgeEventListener {
 		}
 		TeamSpeakMain service = (TeamSpeakMain) GlobalManager.getInstance().getServiceManager().getService(TeamSpeakMain.class);
 		BridgeMessageReceivedEvent receivedEvent = new BridgeMessageReceivedEvent(TeamSpeakMain.class, e.getMessage());
-		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE-")) {
-			String[] args = e.getMessage().getContentUniversal().getAsString().split("-");
+		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE;")) {
+			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 5) {
 				String code = args[1];
 				Integer group = Integer.getInteger(args[2]);
@@ -39,8 +39,8 @@ public class MessageSendListener implements BridgeEventListener {
 				service.addCode(code, group, uuid);
 				GlobalManager.getInstance().getEventHandler().executeEvent(receivedEvent);
 			}
-		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("VERIFIED-")) {
-			String[] args = e.getMessage().getContentUniversal().getAsString().split("-");
+		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("VERIFIED;")) {
+			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 3) {
 				String code = args[1];
 				service.removeCode(code);

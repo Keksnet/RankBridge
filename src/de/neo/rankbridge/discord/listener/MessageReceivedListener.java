@@ -50,7 +50,7 @@ public class MessageReceivedListener extends ListenerAdapter {
 					g.addRoleToMember(e.getMember(), g.getRoleById(vars.get(0))).queue();
 					main.getJDA().openPrivateChannelById(e.getAuthor().getId()).complete().sendMessage(":white_check_mark: successful verified with ```" + vars.get(1) + "``` :white_check_mark:").queue();
 					BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
-					msg.setContent("VERIFIED-" + code + "-" + e.getAuthor().getId());
+					msg.setContent("VERIFIED;" + code + ";" + e.getAuthor().getId());
 					BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(DiscordMain.class, msg);
 					manager.getEventHandler().executeEvent(sendEvent);
 				}

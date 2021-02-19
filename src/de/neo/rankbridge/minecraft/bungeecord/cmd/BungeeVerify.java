@@ -51,7 +51,7 @@ public class BungeeVerify extends Command {
 					groupDC = Long.valueOf(v);
 				}
 			}
-			msg.setContent("ADD_CODE-" + code + "-" + String.valueOf(groupTS) + "-" + String.valueOf(groupDC) + "-" + p.getUniqueId().toString());
+			msg.setContent("ADD_CODE;" + code + ";" + String.valueOf(groupTS) + ";" + String.valueOf(groupDC) + ";" + p.getUniqueId().toString());
 			BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(BungeeService.class, msg);
 			GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
 			p.sendMessage(new TextComponent("§2[§6RankBridge§2] §aDein Verifizierungcode: " + code + ". Gib diesen Code im Discord oder im Teamspeak als Nickname ein um verifiziert."));
