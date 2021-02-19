@@ -47,7 +47,7 @@ public class MessageReceivedListener extends ListenerAdapter {
 						guild = config.getLong("discord.guild");
 					}
 					Guild g = main.getJDA().getGuildById(guild);
-					g.addRoleToMember(e.getMember(), g.getRoleById(vars.get(0))).queue();
+					g.addRoleToMember(g.getMember(e.getAuthor()), g.getRoleById(vars.get(0))).queue();
 					main.getJDA().openPrivateChannelById(e.getAuthor().getId()).complete().sendMessage(":white_check_mark: successful verified with ```" + vars.get(1) + "``` :white_check_mark:").queue();
 					BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
 					msg.setContent("VERIFIED;" + code + ";" + e.getAuthor().getId());
