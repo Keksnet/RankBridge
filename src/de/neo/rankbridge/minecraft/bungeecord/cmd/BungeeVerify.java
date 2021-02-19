@@ -41,10 +41,10 @@ public class BungeeVerify extends Command {
 				String k = (String) val.split(",")[0];
 				String v = (String) val.split(",")[1].replace(" ", "");
 				if(p.hasPermission(k)) {
-					groupTS = Integer.getInteger(v);
+					groupTS = Integer.valueOf(v);
 				}
 			}
-			for(String val : (ArrayList<String>) main.getConfig().getList("teamspeak.groups")) {
+			for(String val : (ArrayList<String>) main.getConfig().getList("discord.groups")) {
 				String k = (String) val.split(",")[0];
 				String v = (String) val.split(",")[1].replace(" ", "");
 				if(p.hasPermission(k)) {
