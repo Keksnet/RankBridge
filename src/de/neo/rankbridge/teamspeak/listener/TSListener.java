@@ -41,9 +41,7 @@ public class TSListener implements TS3Listener {
 				Client c = this.main.getAPI().getClientByUId(e.getInvokerUniqueId()).get();
 				this.main.getAPI().addClientToServerGroup(Integer.valueOf(vars.get(0)), c.getDatabaseId());
 				this.main.getAPI().addClientToServerGroup(this.mcmgr.getInt("teamspeak.verified_group"), c.getDatabaseId());
-				Map<String, String> map = this.main.getAPI().getCustomClientProperties(c.getDatabaseId()).get();
-				map.put(ClientProperty.CLIENT_DESCRIPTION.getName(), "UUID: " + vars.get(0) + " | Name: " + this.mcmgr.getName(vars.get(1)));
-				this.main.getAPI().setCustomClientProperties(c.getDatabaseId(), map);
+				this.main.getAPI().editClient(c.getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + vars.get(0) + " | Name: " + this.mcmgr.getName(vars.get(1)));
 				String verified = this.mcmgr.getString("messages.teamspeak.verified").replace("%playername%", this.mcmgr.getName(vars.get(1)).replace("%uuid%", vars.get(1)));
 				System.out.println();
 				this.main.getAPI().sendPrivateMessage(c.getId(), verified);
