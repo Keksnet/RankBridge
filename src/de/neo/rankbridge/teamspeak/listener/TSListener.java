@@ -37,12 +37,10 @@ public class TSListener implements TS3Listener {
 	public void onTextMessage(TextMessageEvent e) {
 		MultiVar vars = this.main.getCode(e.getMessage().replace(" ", ""));
 		if(vars != null) {
-			System.out.println(1);
 			try {
 				Client c = this.main.getAPI().getClientByUId(e.getInvokerUniqueId()).get();
 				this.main.getAPI().addClientToServerGroup(Integer.valueOf(vars.get(0)), c.getDatabaseId());
-				this.main.getAPI().addClientToServerGroup(Integer.valueOf(this.mcmgr.getString("teamspeak.verified_group")), c.getDatabaseId());
-				System.out.println(2);
+				this.main.getAPI().addClientToServerGroup(this.mcmgr.getInt("teamspeak.verified_group"), c.getDatabaseId());
 				Map<String, String> map = this.main.getAPI().getCustomClientProperties(c.getDatabaseId()).get();
 				map.put(ClientProperty.CLIENT_DESCRIPTION.name(), "UUID: " + vars.get(0) + " | Name: " + this.mcmgr.getName(vars.get(1)));
 				this.main.getAPI().setCustomClientProperties(c.getDatabaseId(), map);
