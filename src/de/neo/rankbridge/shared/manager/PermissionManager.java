@@ -72,7 +72,7 @@ public class PermissionManager {
 	}
 	
 	public Boolean checkTeamspeak(String s1, String uuid) {
-		for(String s : s1.split(";")) {
+		for(String s : s1.split(",")) {
 			if(this.teamspeak_group.containsValue(Integer.valueOf(s))) {
 				if(this.mgr.hasPermission(uuid, getTeamspeakGroup(Integer.valueOf(s)))) {
 					return true;

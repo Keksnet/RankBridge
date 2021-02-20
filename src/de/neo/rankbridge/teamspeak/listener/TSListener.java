@@ -68,7 +68,7 @@ public class TSListener implements TS3Listener {
 			PermissionManager mgr = PermissionManager.getInstance();
 			String uuid = e.getClientDescription().split("|")[0].replace("UUID: ", "").replace(" ", "");
 			if(!mgr.checkTeamspeak(e.getClientServerGroups(), uuid)) {
-				for(String s : e.getClientServerGroups().split(";")) {
+				for(String s : e.getClientServerGroups().split(",")) {
 					if(mgr.isTeamspeakGroup(Integer.valueOf(s))) {
 						this.main.getAPI().removeClientFromServerGroup(Integer.valueOf(s), e.getClientDatabaseId());
 					}
