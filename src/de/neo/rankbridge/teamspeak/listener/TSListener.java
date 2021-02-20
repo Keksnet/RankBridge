@@ -42,7 +42,7 @@ public class TSListener implements TS3Listener {
 				this.main.getAPI().addClientToServerGroup(Integer.valueOf(vars.get(0)), c.getDatabaseId());
 				this.main.getAPI().addClientToServerGroup(this.mcmgr.getInt("teamspeak.verified_group"), c.getDatabaseId());
 				Map<String, String> map = this.main.getAPI().getCustomClientProperties(c.getDatabaseId()).get();
-				map.put(ClientProperty.CLIENT_DESCRIPTION.name(), "UUID: " + vars.get(0) + " | Name: " + this.mcmgr.getName(vars.get(1)));
+				map.put(ClientProperty.CLIENT_DESCRIPTION.getName(), "UUID: " + vars.get(0) + " | Name: " + this.mcmgr.getName(vars.get(1)));
 				this.main.getAPI().setCustomClientProperties(c.getDatabaseId(), map);
 				String verified = this.mcmgr.getString("messages.teamspeak.verified").replace("%playername%", this.mcmgr.getName(vars.get(1)).replace("%uuid%", vars.get(1)));
 				System.out.println();
@@ -57,12 +57,10 @@ public class TSListener implements TS3Listener {
 	@Override
 	public void onClientJoin(ClientJoinEvent e) {
 		if(!e.getClientServerGroups().contains(String.valueOf(this.mcmgr.getInt("teamspeak.verified_group")))) {
-			System.out.println(e.getClientId());
 			this.main.getAPI().sendPrivateMessage(e.getClientId(), this.mcmgr.getString("messages.teamspeak.verify_info"));
 		}else {
 			PermissionManager mgr = PermissionManager.getInstance();
 			String uuid = e.getClientDescription().split("|")[0].replace("UUID: ", "").replace(" ", "");
-			System.out.println(uuid);
 			if(!mgr.checkTeamspeak(e.getClientServerGroups(), uuid)) {
 				for(String s : e.getClientServerGroups().split(",")) {
 					if(mgr.isTeamspeakGroup(Integer.valueOf(s))) {
