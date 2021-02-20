@@ -41,7 +41,7 @@ public class TSListener implements TS3Listener {
 				Client c = this.main.getAPI().getClientByUId(e.getInvokerUniqueId()).get();
 				this.main.getAPI().addClientToServerGroup(Integer.valueOf(vars.get(0)), c.getDatabaseId());
 				this.main.getAPI().addClientToServerGroup(this.mcmgr.getInt("teamspeak.verified_group"), c.getDatabaseId());
-				this.main.getAPI().editClient(c.getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + vars.get(0) + " | Name: " + this.mcmgr.getName(vars.get(1)));
+				this.main.getAPI().editClient(c.getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + vars.get(1) + " | Name: " + this.mcmgr.getName(vars.get(1)));
 				String verified = this.mcmgr.getString("messages.teamspeak.verified").replace("%playername%", this.mcmgr.getName(vars.get(1)).replace("%uuid%", vars.get(1)));
 				System.out.println();
 				this.main.getAPI().sendPrivateMessage(c.getId(), verified);
@@ -59,6 +59,7 @@ public class TSListener implements TS3Listener {
 		}else {
 			PermissionManager mgr = PermissionManager.getInstance();
 			String uuid = e.getClientDescription().split("|")[0].replace("UUID: ", "").replace(" ", "");
+			System.out.println(uuid + " => " + e.getClientDescription());
 			if(!mgr.checkTeamspeak(e.getClientServerGroups(), uuid)) {
 				for(String s : e.getClientServerGroups().split(",")) {
 					if(mgr.isTeamspeakGroup(Integer.valueOf(s))) {
