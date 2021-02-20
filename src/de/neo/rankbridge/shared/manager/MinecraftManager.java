@@ -18,6 +18,7 @@ public class MinecraftManager {
 	private static MinecraftManager INSTANCE;
 	
 	public MinecraftManager() {
+		INSTANCE = this;
 	}
 	
 	public static MinecraftManager getInstance() {
