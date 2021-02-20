@@ -51,13 +51,13 @@ public class TeamSpeakMain extends BridgeService {
 				TS3Query query = new TS3Query(config);
 				query.connect();
 				
-				TS3ApiAsync api = query.getAsyncApi();
-				api.login(user, password).await();
-				api.selectVirtualServerById(vserver).await();
-				api.setNickname(nickname).await();
+				this.api = query.getAsyncApi();
+				this.api.login(user, password).await();
+				this.api.selectVirtualServerById(vserver).await();
+				this.api.setNickname(nickname).await();
 				System.out.println("TeamSpeakBot is online!");
-				api.registerAllEvents().await();
-				api.addTS3Listeners(new TSListener(this));
+				this.api.registerAllEvents().await();
+				this.api.addTS3Listeners(new TSListener(this));
 				TeamSpeakReadyEvent readyEvent = new TeamSpeakReadyEvent(TeamSpeakMain.class);
 				manager.getEventHandler().executeEvent(readyEvent);
 			}catch(InterruptedException e) {
