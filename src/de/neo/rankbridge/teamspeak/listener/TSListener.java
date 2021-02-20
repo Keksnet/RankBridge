@@ -57,13 +57,7 @@ public class TSListener implements TS3Listener {
 	@Override
 	public void onClientJoin(ClientJoinEvent e) {
 		if(!e.getClientServerGroups().contains(String.valueOf(this.mcmgr.getInt("teamspeak.verified_group")))) {
-			try {
-				Client client = this.main.getAPI().getClientByUId(e.getUniqueClientIdentifier()).get();
-				this.main.getAPI().sendPrivateMessage(client.getId(), this.mcmgr.getString("messages.teamspeak.verify_info"));
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			
+			this.main.getAPI().sendPrivateMessage(e.getClientId(), this.mcmgr.getString("messages.teamspeak.verify_info"));
 		}else {
 			PermissionManager mgr = PermissionManager.getInstance();
 			String uuid = e.getClientDescription().split("|")[0].replace("UUID: ", "").replace(" ", "");
