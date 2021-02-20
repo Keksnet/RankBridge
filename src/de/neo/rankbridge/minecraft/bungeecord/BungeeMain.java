@@ -14,6 +14,8 @@ import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftReadyEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.manager.GlobalManager;
+import de.neo.rankbridge.shared.manager.MinecraftManager;
+import de.neo.rankbridge.shared.manager.PermissionManager;
 import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -37,6 +39,9 @@ public class BungeeMain extends Plugin{
 		manager.getServiceManager().register(mcService);
 		BungeeService service = new BungeeService(this);
 		manager.getServiceManager().register(service);
+		
+		MinecraftManager mgr = new MinecraftManager();
+		new PermissionManager(mgr);
 		
 		loadConfig();
 		if(this.config.getBoolean("discord.enable")) {
