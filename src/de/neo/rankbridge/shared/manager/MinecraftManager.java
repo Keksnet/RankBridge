@@ -11,6 +11,9 @@ import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.minecraft.spigot.SpigotService;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.node.Node;
 import net.md_5.bungee.config.Configuration;
 
 public class MinecraftManager {
@@ -47,7 +50,14 @@ public class MinecraftManager {
 				return Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getPlayer().hasPermission(perm);
 			}else if(mcService.getMinecraftType().equals(MinecraftType.BUNGEECORD)) {
 				BungeeMain bungee = (BungeeMain) manager.getServiceManager().getService(BungeeService.class).getExternalService().getMain();
-				return bungee.getProxy().getPlayer(UUID.fromString(uuid)).hasPermission(perm);
+				if(bungee.getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
+					for(Node n : LuckPermsProvider.get().getUserManager().getUser(UUID.fromString(uuid)).getNodes()) {
+						System.out.println(n.getKey());
+						if(n.getValue() && n.getKey().equalsIgnoreCase(perm)) {
+							return true;
+						}
+					}
+				}
 			}
 		}
 		return false;

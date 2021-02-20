@@ -1,8 +1,6 @@
 package de.neo.rankbridge.teamspeak.listener;
 
 import java.util.ArrayList;
-import java.util.Map;
-
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.event.ChannelCreateEvent;
 import com.github.theholywaffle.teamspeak3.api.event.ChannelDeletedEvent;
