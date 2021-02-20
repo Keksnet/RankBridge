@@ -11,7 +11,6 @@ import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.minecraft.spigot.SpigotService;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
-import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.node.Node;
 import net.md_5.bungee.config.Configuration;

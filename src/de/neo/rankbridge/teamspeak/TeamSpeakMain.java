@@ -66,8 +66,8 @@ public class TeamSpeakMain extends BridgeService {
 		}
 	}
 	
-	public void addCode(String code, Integer group, UUID uuid) {
-		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString()));
+	public void addCode(String code, Integer group, UUID uuid, String ip) {
+		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString(), ip));
 	}
 	
 	public MultiVar getCode(String code) {

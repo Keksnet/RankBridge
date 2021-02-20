@@ -16,8 +16,14 @@ import com.github.theholywaffle.teamspeak3.api.event.ServerEditedEvent;
 import com.github.theholywaffle.teamspeak3.api.event.TS3Listener;
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
+
+import de.neo.rankbridge.discord.DiscordMain;
+import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
+import de.neo.rankbridge.shared.manager.GlobalManager;
 import de.neo.rankbridge.shared.manager.MinecraftManager;
 import de.neo.rankbridge.shared.manager.PermissionManager;
+import de.neo.rankbridge.shared.message.BridgeMessage;
+import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 import de.neo.rankbridge.shared.util.MultiVar;
 import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
@@ -41,8 +47,12 @@ public class TSListener implements TS3Listener {
 				this.main.getAPI().addClientToServerGroup(this.mcmgr.getInt("teamspeak.verified_group"), c.getDatabaseId());
 				this.main.getAPI().editClient(c.getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + vars.get(1) + " | Name: " + this.mcmgr.getName(vars.get(1)));
 				String verified = this.mcmgr.getString("messages.teamspeak.verified").replace("%playername%", this.mcmgr.getName(vars.get(1)).replace("%uuid%", vars.get(1)));
-				System.out.println();
 				this.main.getAPI().sendPrivateMessage(c.getId(), verified);
+				this.main.removeCode(e.getMessage().replace(" ", ""));
+				BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
+				msg.setContent("VERIFIED;" + e.getMessage().replace(" ", "") + ";" + e.getInvokerUniqueId());
+				BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(DiscordMain.class, msg);
+				GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
 			}catch(InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -62,6 +72,7 @@ public class TSListener implements TS3Listener {
 				for(String s : e.getClientServerGroups().split(",")) {
 					if(mgr.isTeamspeakGroup(Integer.valueOf(s))) {
 						this.main.getAPI().removeClientFromServerGroup(Integer.valueOf(s), e.getClientDatabaseId());
+						this.main.getAPI().removeClientFromServerGroup(this.mcmgr.getInt("teamspeak.verified_group"), e.getClientDatabaseId());
 					}
 				}
 				for(String val : (ArrayList<String>) this.mcmgr.getList("teamspeak.groups")) {
@@ -69,6 +80,8 @@ public class TSListener implements TS3Listener {
 					String v = (String) val.split(",")[1].replace(" ", "");
 					if(this.mcmgr.hasPermission(uuid, k)) {
 						this.main.getAPI().addClientToServerGroup(Integer.valueOf(v), e.getClientDatabaseId());
+						this.main.getAPI().addClientToServerGroup(this.mcmgr.getInt("teamspeak.verified_group"), e.getClientDatabaseId());
+						return;
 					}
 				}
 			}

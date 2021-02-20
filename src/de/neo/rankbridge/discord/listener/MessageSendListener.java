@@ -30,7 +30,7 @@ public class MessageSendListener implements BridgeEventListener {
 		DiscordMain service = (DiscordMain) GlobalManager.getInstance().getServiceManager().getService(DiscordMain.class);
 		if(e.getMessage().getContentUniversal().getAsString().startsWith("ADD_CODE;")) {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
-			if(args.length == 5) {
+			if(args.length == 6) {
 				System.out.println(e.getMessage().getContentUniversal().getAsString());
 				String code = args[1];
 				Long group = Long.valueOf(args[3]);
