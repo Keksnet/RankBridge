@@ -58,7 +58,7 @@ public class TSListener implements TS3Listener {
 			this.main.getAPI().sendPrivateMessage(e.getClientId(), this.mcmgr.getString("messages.teamspeak.verify_info"));
 		}else {
 			PermissionManager mgr = PermissionManager.getInstance();
-			String uuid = e.getClientDescription().split("|")[0].replace("UUID: ", "").replace(" ", "");
+			String uuid = e.getClientDescription().split("[|]")[0].replace("UUID: ", "").replace(" ", "");
 			System.out.println(uuid + " => " + e.getClientDescription());
 			if(!mgr.checkTeamspeak(e.getClientServerGroups(), uuid)) {
 				for(String s : e.getClientServerGroups().split(",")) {
