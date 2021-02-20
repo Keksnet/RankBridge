@@ -40,15 +40,16 @@ public class BungeeMain extends Plugin{
 		BungeeService service = new BungeeService(this);
 		manager.getServiceManager().register(service);
 		
-		MinecraftManager mgr = new MinecraftManager();
-		new PermissionManager(mgr);
-		
 		loadConfig();
+		MinecraftManager mgr = new MinecraftManager();
 		if(this.config.getBoolean("discord.enable")) {
 			new DiscordMain();
 		}
 		if(this.config.getBoolean("teamspeak.enable")) {
 			new TeamSpeakMain();
+		}
+		if(this.config.getBoolean("teamspeak.enable") || this.config.getBoolean("discord.enable")) {
+			new PermissionManager(mgr);
 		}
 		
 		getProxy().getPluginManager().registerCommand(this, new BungeeVerify());
