@@ -73,6 +73,7 @@ public class BungeeMain extends Plugin{
 				this.config.set("discord.token", "BOT_TOKEN_HERE");
 				this.config.set("discord.activity", "verifing players");
 				this.config.set("discord.guild", 0l);
+				this.config.set("discord.verified_group", 0l);
 				ArrayList<String> discord_group = new ArrayList<>();
 				discord_group.add("group.admin, 0");
 				this.config.set("discord.groups", discord_group);
@@ -84,9 +85,15 @@ public class BungeeMain extends Plugin{
 				this.config.set("teamspeak.port", 10011);
 				this.config.set("teamspeak.vserver", 1);
 				this.config.set("teamspeak.nickname", "Verify Bot");
+				this.config.set("teamspeak.verified_group", 0);
 				ArrayList<String> teamspeak_group = new ArrayList<>();
 				teamspeak_group.add("group.admin, 6");
 				this.config.set("teamspeak.groups", teamspeak_group);
+				
+				this.config.set("messages.discord.verified", "verified message");
+				
+				this.config.set("messages.teamspeak.verify_info", "verify_info message");
+				this.config.set("messages.teamspeak.verified", "verified message");
 				ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.config, f);
 				getProxy().getLogger().log(Level.WARNING, "config generated.");
 			}
