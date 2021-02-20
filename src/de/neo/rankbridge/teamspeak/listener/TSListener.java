@@ -18,7 +18,6 @@ import com.github.theholywaffle.teamspeak3.api.event.ServerEditedEvent;
 import com.github.theholywaffle.teamspeak3.api.event.TS3Listener;
 import com.github.theholywaffle.teamspeak3.api.event.TextMessageEvent;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import de.neo.rankbridge.shared.manager.GlobalManager;
 import de.neo.rankbridge.shared.manager.MinecraftManager;
 import de.neo.rankbridge.shared.manager.PermissionManager;
 import de.neo.rankbridge.shared.util.MultiVar;
@@ -29,8 +28,8 @@ public class TSListener implements TS3Listener {
 	private TeamSpeakMain main;
 	private MinecraftManager mcmgr;
 	
-	public TSListener() {
-		this.main = (TeamSpeakMain) GlobalManager.getInstance().getServiceManager().getService(TeamSpeakMain.class);
+	public TSListener(TeamSpeakMain main) {
+		this.main = main;
 		this.mcmgr = MinecraftManager.getInstance();
 	}
 

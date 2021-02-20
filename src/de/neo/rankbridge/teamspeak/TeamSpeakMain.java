@@ -57,7 +57,7 @@ public class TeamSpeakMain extends BridgeService {
 				api.setNickname(nickname).await();
 				System.out.println("TeamSpeakBot is online!");
 				api.registerAllEvents().await();
-				api.addTS3Listeners(new TSListener());
+				api.addTS3Listeners(new TSListener(this));
 				TeamSpeakReadyEvent readyEvent = new TeamSpeakReadyEvent(TeamSpeakMain.class);
 				manager.getEventHandler().executeEvent(readyEvent);
 			}catch(InterruptedException e) {
