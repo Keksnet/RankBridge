@@ -43,6 +43,12 @@ public class MessageSendListener implements BridgeEventListener {
 				String code = args[1];
 				service.removeCode(code);
 			}
+		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("INVOKE;")) {
+			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
+			if(args.length == 2) {
+				String code = args[1];
+				service.removeCode(code);
+			}
 		}
 	}
 }

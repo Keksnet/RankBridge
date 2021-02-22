@@ -65,6 +65,7 @@ public class MessageSendListener implements BridgeEventListener {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 4) {
 				MinecraftManager mgr = MinecraftManager.getInstance();
+				String code = args[1];
 				String id = args[2];
 				String uuid = args[3];
 				if(type.equals(MinecraftType.SPIGOT)) {
@@ -78,6 +79,7 @@ public class MessageSendListener implements BridgeEventListener {
 					if(p != null && p.isConnected()) {
 						p.sendMessage(new TextComponent(mgr.getString("messages.minecraft.verified").replace("%user%", id)));
 					}
+					main.removeCodeSingle(code, uuid);
 				}
 			}
 		}

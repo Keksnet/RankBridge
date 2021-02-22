@@ -52,6 +52,7 @@ public class BungeeVerify extends Command {
 					groupDC = Long.valueOf(v);
 				}
 			}
+			main.addCode(code, p.getUniqueId().toString());
 			MinecraftManager mgr = MinecraftManager.getInstance();
 			p.sendMessage(new TextComponent(mgr.getString("messages.minecraft.verify_info")));
 			msg.setContent("ADD_CODE;" + code + ";" + String.valueOf(groupTS) + ";" + String.valueOf(groupDC) + ";" + p.getUniqueId().toString() + ";" + p.getAddress().getAddress().getHostAddress());
@@ -59,5 +60,4 @@ public class BungeeVerify extends Command {
 			GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
 		}
 	}
-
 }

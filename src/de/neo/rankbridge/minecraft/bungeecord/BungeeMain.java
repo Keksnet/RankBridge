@@ -4,19 +4,26 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import de.neo.rankbridge.SyncService;
 import de.neo.rankbridge.discord.DiscordMain;
 import de.neo.rankbridge.minecraft.MinecraftService;
 import de.neo.rankbridge.minecraft.bungeecord.cmd.BungeeVerify;
+import de.neo.rankbridge.minecraft.bungeecord.listener.JoinQuitListener;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftReadyEvent;
+import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.manager.GlobalManager;
 import de.neo.rankbridge.shared.manager.MinecraftManager;
 import de.neo.rankbridge.shared.manager.PermissionManager;
+import de.neo.rankbridge.shared.message.BridgeMessage;
+import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 import de.neo.rankbridge.teamspeak.TeamSpeakMain;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -25,6 +32,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 public class BungeeMain extends Plugin{
 	
 	private Configuration config;
+	private HashMap<ProxiedPlayer, String> codes;
 	
 	public void onEnable() {
 		GlobalManager manager = SyncService.isGlobalManagerRegistered() ? GlobalManager.getInstance() : new GlobalManager();
@@ -52,7 +60,10 @@ public class BungeeMain extends Plugin{
 			new TeamSpeakMain();
 		}
 		
+		this.codes = new HashMap<>();
+		
 		getProxy().getPluginManager().registerCommand(this, new BungeeVerify());
+		getProxy().getPluginManager().registerListener(this, new JoinQuitListener());
 		
 		MinecraftReadyEvent readyEvent = new MinecraftReadyEvent(BungeeService.class, MinecraftType.BUNGEECORD);
 		manager.getEventHandler().executeEvent(readyEvent);
@@ -110,5 +121,24 @@ public class BungeeMain extends Plugin{
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void addCode(String code, String uuid) {
+		if(this.codes.containsKey(getProxy().getPlayer(UUID.fromString(uuid)))) {
+			removeCode(uuid);
+		}
+		this.codes.put(getProxy().getPlayer(UUID.fromString(uuid)), code);
+	}
+	
+	public void removeCodeSingle(String code, String uuid) {
+		this.codes.remove(getProxy().getPlayer(UUID.fromString(uuid)), code);
+	}
+	
+	public void removeCode(String uuid) {
+		BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.MINECRAFT);
+		msg.setContent("INVOKE;" + this.codes.get(getProxy().getPlayer(UUID.fromString(uuid))));
+		BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(BungeeService.class, msg);
+		GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
+		this.codes.remove(getProxy().getPlayer(UUID.fromString(uuid)), this.codes.get(getProxy().getPlayer(UUID.fromString(uuid))));
 	}
 }
