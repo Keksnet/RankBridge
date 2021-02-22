@@ -53,7 +53,7 @@ public class MessageSendListener implements BridgeEventListener {
 						Client c = cs.get(i);
 						System.out.println(ip);
 						if(c.getIp().equals(ip)) {
-							css[css.length] = c;
+							css[i] = c;
 						}
 					}
 					if(css.length > 0) {
