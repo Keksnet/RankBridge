@@ -39,7 +39,7 @@ public class MessageReceivedListener extends ListenerAdapter {
 					}
 					main.removeCode(code);
 					BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
-					msg.setContent("VERIFIED;" + code + ";" + e.getAuthor().getId());
+					msg.setContent("VERIFIED;" + code + ";" + e.getAuthor().getId() + ";" + vars.get(1));
 					BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(DiscordMain.class, msg);
 					manager.getEventHandler().executeEvent(sendEvent);
 				}

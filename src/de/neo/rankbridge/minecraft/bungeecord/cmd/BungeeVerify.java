@@ -11,6 +11,7 @@ import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
 import de.neo.rankbridge.shared.manager.BridgeServiceManager;
 import de.neo.rankbridge.shared.manager.GlobalManager;
+import de.neo.rankbridge.shared.manager.MinecraftManager;
 import de.neo.rankbridge.shared.manager.services.BridgeService;
 import de.neo.rankbridge.shared.manager.services.ExternalService;
 import de.neo.rankbridge.shared.message.BridgeMessage;
@@ -59,7 +60,8 @@ public class BungeeVerify extends Command {
 			msg.setContent("ADD_CODE;" + code + ";" + String.valueOf(groupTS) + ";" + String.valueOf(groupDC) + ";" + p.getUniqueId().toString() + ";" + p.getAddress().getAddress().getHostAddress());
 			BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(BungeeService.class, msg);
 			GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
-			p.sendMessage(new TextComponent("§2[§6RankBridge§2] §aDein Verifizierungcode: " + code + ". Gib diesen Code im Discord oder im Teamspeak als Nickname ein um verifiziert."));
+			MinecraftManager mgr = MinecraftManager.getInstance();
+			p.sendMessage(new TextComponent(mgr.getString("messages.minecraft.verify_info")));
 		}
 	}
 

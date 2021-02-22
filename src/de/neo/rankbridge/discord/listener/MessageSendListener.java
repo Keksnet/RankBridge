@@ -39,7 +39,7 @@ public class MessageSendListener implements BridgeEventListener {
 			}
 		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("VERIFIED;")) {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
-			if(args.length == 3) {
+			if(args.length == 4) {
 				String code = args[1];
 				service.removeCode(code);
 			}

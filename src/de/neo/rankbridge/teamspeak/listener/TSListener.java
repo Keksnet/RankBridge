@@ -50,7 +50,7 @@ public class TSListener implements TS3Listener {
 				this.main.getAPI().sendPrivateMessage(c.getId(), verified);
 				this.main.removeCode(e.getMessage().replace(" ", ""));
 				BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
-				msg.setContent("VERIFIED;" + e.getMessage().replace(" ", "") + ";" + e.getInvokerUniqueId());
+				msg.setContent("VERIFIED;" + e.getMessage().replace(" ", "") + ";" + e.getInvokerUniqueId() + ";" + vars.get(1));
 				BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(DiscordMain.class, msg);
 				GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
 			}catch(InterruptedException e1) {

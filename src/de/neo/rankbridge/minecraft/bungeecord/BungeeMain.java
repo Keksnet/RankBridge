@@ -100,6 +100,10 @@ public class BungeeMain extends Plugin{
 				
 				this.config.set("messages.teamspeak.verify_info", "verify_info message");
 				this.config.set("messages.teamspeak.verified", "verified message");
+				
+				this.config.set("messages.minecraft.verify_info", "verify_info message");
+				this.config.set("messages.minecraft.code_info", "code_info message");
+				this.config.set("messages.minecraft.verified", "verified message");
 				ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.config, f);
 				getProxy().getLogger().log(Level.WARNING, "config generated.");
 			}

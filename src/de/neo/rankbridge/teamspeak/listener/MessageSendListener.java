@@ -6,7 +6,6 @@ import java.util.UUID;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import com.github.theholywaffle.teamspeak3.api.wrapper.VirtualServerInfo;
 
-import de.neo.rankbridge.discord.DiscordMain;
 import de.neo.rankbridge.shared.event.BridgeEventListener;
 import de.neo.rankbridge.shared.event.events.BridgeEvent;
 import de.neo.rankbridge.shared.event.events.message.BridgeMessageReceivedEvent;
@@ -52,9 +51,7 @@ public class MessageSendListener implements BridgeEventListener {
 					Integer clients = 0;
 					for(int i = 0; i < cs.size(); i++) {
 						Client c = cs.get(i);
-						System.out.println(ip + " => " + i);
 						if(c.getIp().equals(ip) && c.isRegularClient()) {
-							System.out.println("true => " + c.getUniqueIdentifier());
 							css[i] = c;
 							clients++;
 						}
@@ -67,11 +64,48 @@ public class MessageSendListener implements BridgeEventListener {
 							String verified = mgr.getString("messages.teamspeak.verified").replace("%playername%", mgr.getName(uuid.toString()).replace("%uuid%", uuid.toString()));
 							service.getAPI().sendPrivateMessage(css[0].getId(), verified);
 							service.removeCode(code);
-							BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.DISCORD);
-							msg.setContent("VERIFIED;" + code + ";" + css[0].getUniqueIdentifier());
-							BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(DiscordMain.class, msg);
+							BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.TEAMSPEAK);
+							msg.setContent("VERIFIED;" + code + ";" + css[0].getUniqueIdentifier() + ";" + uuid);
+							BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
 							GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
+						}else {
+							MinecraftManager mgr = MinecraftManager.getInstance();
+							Boolean found = false;
+							String name = mgr.getName(uuid.toString());
+							for(Client c1 : css) {
+								if(c1 != null) {
+									if(c1.getNickname().contains(name)) {
+										found = true;
+										service.getAPI().addClientToServerGroup(group, c1.getDatabaseId());
+										service.getAPI().addClientToServerGroup(MinecraftManager.getInstance().getInt("teamspeak.verified_group"), c1.getDatabaseId());
+										String verified = mgr.getString("messages.teamspeak.verified").replace("%playername%", mgr.getName(uuid.toString()).replace("%uuid%", uuid.toString()));
+										service.getAPI().sendPrivateMessage(c1.getId(), verified);
+										service.removeCode(code);
+										BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.TEAMSPEAK);
+										msg.setContent("VERIFIED;" + code + ";" + c1.getUniqueIdentifier() + ";" + uuid);
+										BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
+										GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
+										break;
+									}
+								}
+							}
+							if(!found) {
+								BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.TEAMSPEAK);
+								msg.setContent("REQUEST_CODE;" + code + ";" + uuid);
+								BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
+								GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
+								for(Client c1 : cs) {
+									if(c1 != null) {
+										service.getAPI().sendPrivateMessage(c1.getId(), mgr.getString("messages.teamspeak.verify_info"));
+									}
+								}
+							}
 						}
+					}else {
+						BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.TEAMSPEAK);
+						msg.setContent("REQUEST_CODE;" + code + ";" + uuid);
+						BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
+						GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
 					}
 				}catch(InterruptedException e1) {
 					e1.printStackTrace();
@@ -80,7 +114,7 @@ public class MessageSendListener implements BridgeEventListener {
 			}
 		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("VERIFIED;")) {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
-			if(args.length == 3) {
+			if(args.length == 4) {
 				String code = args[1];
 				service.removeCode(code);
 				GlobalManager.getInstance().getEventHandler().executeEvent(receivedEvent);
