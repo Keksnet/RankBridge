@@ -49,15 +49,18 @@ public class MessageSendListener implements BridgeEventListener {
 					VirtualServerInfo info = service.getAPI().getServerInfo().get();
 					Client[] css = new Client[info.getMaxClients()];
 					List<Client> cs = service.getAPI().getClients().get();
+					Integer clients = 0;
 					for(int i = 0; i < cs.size(); i++) {
 						Client c = cs.get(i);
-						System.out.println(ip);
+						System.out.println(ip + " => " + i);
 						if(c.getIp().equals(ip)) {
+							System.out.println("true => " + c.getUniqueIdentifier());
 							css[i] = c;
+							clients++;
 						}
 					}
-					if(css.length > 0) {
-						if(css.length == 1) {
+					if(clients > 0) {
+						if(clients == 1) {
 							service.getAPI().addClientToServerGroup(group, css[0].getDatabaseId());
 							service.getAPI().addClientToServerGroup(MinecraftManager.getInstance().getInt("teamspeak.verified_group"), css[0].getDatabaseId());
 							MinecraftManager mgr = MinecraftManager.getInstance();
