@@ -3,9 +3,6 @@ package de.neo.rankbridge.minecraft.bungeecord.cmd;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
@@ -30,7 +27,6 @@ public class BungeeVerify extends Command {
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		Logger l = LoggerFactory.getLogger("ver");
 		if(sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.MINECRAFT);
@@ -56,12 +52,11 @@ public class BungeeVerify extends Command {
 					groupDC = Long.valueOf(v);
 				}
 			}
-			l.warn(p.getAddress().getAddress().getHostAddress());
+			MinecraftManager mgr = MinecraftManager.getInstance();
+			p.sendMessage(new TextComponent(mgr.getString("messages.minecraft.verify_info")));
 			msg.setContent("ADD_CODE;" + code + ";" + String.valueOf(groupTS) + ";" + String.valueOf(groupDC) + ";" + p.getUniqueId().toString() + ";" + p.getAddress().getAddress().getHostAddress());
 			BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(BungeeService.class, msg);
 			GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
-			MinecraftManager mgr = MinecraftManager.getInstance();
-			p.sendMessage(new TextComponent(mgr.getString("messages.minecraft.verify_info")));
 		}
 	}
 

@@ -3,6 +3,7 @@ package de.neo.rankbridge.teamspeak.listener;
 import java.util.List;
 import java.util.UUID;
 
+import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import com.github.theholywaffle.teamspeak3.api.wrapper.VirtualServerInfo;
 
@@ -58,9 +59,10 @@ public class MessageSendListener implements BridgeEventListener {
 					}
 					if(clients > 0) {
 						if(clients == 1) {
+							MinecraftManager mgr = MinecraftManager.getInstance();
 							service.getAPI().addClientToServerGroup(group, css[0].getDatabaseId());
 							service.getAPI().addClientToServerGroup(MinecraftManager.getInstance().getInt("teamspeak.verified_group"), css[0].getDatabaseId());
-							MinecraftManager mgr = MinecraftManager.getInstance();
+							service.getAPI().editClient(css[0].getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + uuid + " | Name: " + mgr.getName(uuid.toString()));
 							String verified = mgr.getString("messages.teamspeak.verified").replace("%playername%", mgr.getName(uuid.toString()).replace("%uuid%", uuid.toString()));
 							service.getAPI().sendPrivateMessage(css[0].getId(), verified);
 							service.removeCode(code);

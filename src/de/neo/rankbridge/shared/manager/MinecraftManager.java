@@ -1,10 +1,20 @@
 package de.neo.rankbridge.shared.manager;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import de.neo.rankbridge.minecraft.MinecraftService;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
@@ -38,8 +48,7 @@ public class MinecraftManager {
 			if(mcService.getMinecraftType().equals(MinecraftType.SPIGOT)) {
 				return Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName();
 			}else if(mcService.getMinecraftType().equals(MinecraftType.BUNGEECORD)) {
-				BungeeMain bungee = (BungeeMain) manager.getServiceManager().getService(BungeeService.class).getExternalService().getMain();
-				return bungee.getProxy().getPlayer(UUID.fromString(uuid)).getName();
+				return getBungeeName(uuid);
 			}
 		}
 		return null;
@@ -139,5 +148,33 @@ public class MinecraftManager {
 			}
 		}
 		return null;
+	}
+	
+	private String getBungeeName(String uuid) {
+		try {
+			URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
+			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+			String response = parse(con.getInputStream());
+			Gson gson = new Gson();
+			JsonObject obj = gson.fromJson(response, JsonObject.class);
+			return obj.get("name").getAsString();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private String parse(InputStream is) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+		
+		String az;
+		while((az = br.readLine()) != null) {
+			sb.append(az);
+			sb.append("\n");
+		}
+		br.close();
+		
+		return sb.toString().trim();
 	}
 }
