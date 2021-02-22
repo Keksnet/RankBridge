@@ -79,8 +79,10 @@ public class MessageSendListener implements BridgeEventListener {
 									if(c1.getNickname().contains(name)) {
 										if(found) {
 											found = false;
+											System.out.println("break");
 											break;
 										}
+										System.out.println("weiter");
 										found = true;
 										service.getAPI().addClientToServerGroup(group, c1.getDatabaseId());
 										service.getAPI().addClientToServerGroup(MinecraftManager.getInstance().getInt("teamspeak.verified_group"), c1.getDatabaseId());
@@ -100,7 +102,7 @@ public class MessageSendListener implements BridgeEventListener {
 								msg.setContent("REQUEST_CODE;" + code + ";" + uuid);
 								BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
 								GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
-								for(Client c1 : cs) {
+								for(Client c1 : css) {
 									if(c1 != null) {
 										service.getAPI().sendPrivateMessage(c1.getId(), mgr.getString("messages.teamspeak.verify_info"));
 									}
