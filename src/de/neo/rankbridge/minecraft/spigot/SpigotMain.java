@@ -16,6 +16,7 @@ import de.neo.rankbridge.SyncService;
 import de.neo.rankbridge.minecraft.MinecraftService;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.minecraft.spigot.cmd.SpigotVerify;
+import de.neo.rankbridge.minecraft.spigot.listener.JoinQuitListener;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftReadyEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
@@ -50,6 +51,7 @@ public class SpigotMain extends JavaPlugin {
 		this.codes = new HashMap<>();
 		
 		getCommand("verify").setExecutor(new SpigotVerify());
+		Bukkit.getPluginManager().registerEvents(new JoinQuitListener(), this);
 		
 		MinecraftReadyEvent readyEvent = new MinecraftReadyEvent(SpigotService.class, MinecraftType.SPIGOT);
 		manager.getEventHandler().executeEvent(readyEvent);

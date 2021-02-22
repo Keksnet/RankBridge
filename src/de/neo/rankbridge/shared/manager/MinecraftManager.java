@@ -152,7 +152,7 @@ public class MinecraftManager {
 	
 	private String getBungeeName(String uuid) {
 		try {
-			URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
+			URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", ""));
 			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 			String response = parse(con.getInputStream());
 			Gson gson = new Gson();
