@@ -13,6 +13,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.neo.rankbridge.SyncService;
+import de.neo.rankbridge.discord.DiscordMain;
 import de.neo.rankbridge.minecraft.MinecraftService;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.minecraft.spigot.cmd.SpigotVerify;
@@ -22,8 +23,11 @@ import de.neo.rankbridge.shared.event.events.MinecraftReadyEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
 import de.neo.rankbridge.shared.manager.GlobalManager;
+import de.neo.rankbridge.shared.manager.MinecraftManager;
+import de.neo.rankbridge.shared.manager.PermissionManager;
 import de.neo.rankbridge.shared.message.BridgeMessage;
 import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
+import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
 public class SpigotMain extends JavaPlugin {
 	
@@ -44,6 +48,17 @@ public class SpigotMain extends JavaPlugin {
 		manager.getServiceManager().register(service);
 		
 		loadConfig();
+		MinecraftManager mgr = new MinecraftManager();
+		if(getConfig().getBoolean("teamspeak.enable") || getConfig().getBoolean("discord.enable")) {
+			new PermissionManager(mgr);
+		}
+		if(getConfig().getBoolean("discord.enable")) {
+			new DiscordMain();
+		}
+		if(getConfig().getBoolean("teamspeak.enable")) {
+			new TeamSpeakMain();
+		}
+		
 		if(!Bukkit.getPluginManager().isPluginEnabled(this)) {
 			return;
 		}
