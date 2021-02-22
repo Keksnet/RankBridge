@@ -80,6 +80,7 @@ public class MessageSendListener implements BridgeEventListener {
 										found = true;
 										service.getAPI().addClientToServerGroup(group, c1.getDatabaseId());
 										service.getAPI().addClientToServerGroup(MinecraftManager.getInstance().getInt("teamspeak.verified_group"), c1.getDatabaseId());
+										service.getAPI().editClient(css[0].getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + uuid + " | Name: " + mgr.getName(uuid.toString()));
 										String verified = mgr.getString("messages.teamspeak.verified").replace("%playername%", mgr.getName(uuid.toString()).replace("%uuid%", uuid.toString()));
 										service.getAPI().sendPrivateMessage(c1.getId(), verified);
 										service.removeCode(code);
