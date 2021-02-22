@@ -74,30 +74,31 @@ public class MessageSendListener implements BridgeEventListener {
 							MinecraftManager mgr = MinecraftManager.getInstance();
 							Boolean found = false;
 							String name = mgr.getName(uuid.toString());
+							Client rc = null;
 							for(Client c1 : css) {
 								if(c1 != null) {
 									if(c1.getNickname().contains(name)) {
 										if(found) {
 											found = false;
-											System.out.println("break");
 											break;
 										}
-										System.out.println("weiter");
 										found = true;
-										service.getAPI().addClientToServerGroup(group, c1.getDatabaseId());
-										service.getAPI().addClientToServerGroup(MinecraftManager.getInstance().getInt("teamspeak.verified_group"), c1.getDatabaseId());
-										service.getAPI().editClient(c1.getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + uuid + " | Name: " + mgr.getName(uuid.toString()));
-										String verified = mgr.getString("messages.teamspeak.verified").replace("%playername%", mgr.getName(uuid.toString()).replace("%uuid%", uuid.toString()));
-										service.getAPI().sendPrivateMessage(c1.getId(), verified);
-										service.removeCode(code);
-										BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.TEAMSPEAK);
-										msg.setContent("VERIFIED;" + code + ";" + c1.getUniqueIdentifier() + ";" + uuid);
-										BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
-										GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
+										rc = c1;
 									}
 								}
 							}
-							if(!found) {
+							if(found) {
+								service.getAPI().addClientToServerGroup(group, rc.getDatabaseId());
+								service.getAPI().addClientToServerGroup(MinecraftManager.getInstance().getInt("teamspeak.verified_group"), rc.getDatabaseId());
+								service.getAPI().editClient(rc.getId(), ClientProperty.CLIENT_DESCRIPTION, "UUID: " + uuid + " | Name: " + mgr.getName(uuid.toString()));
+								String verified = mgr.getString("messages.teamspeak.verified").replace("%playername%", mgr.getName(uuid.toString()).replace("%uuid%", uuid.toString()));
+								service.getAPI().sendPrivateMessage(rc.getId(), verified);
+								service.removeCode(code);
+								BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.TEAMSPEAK);
+								msg.setContent("VERIFIED;" + code + ";" + rc.getUniqueIdentifier() + ";" + uuid);
+								BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
+								GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
+							}else {
 								BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.TEAMSPEAK);
 								msg.setContent("REQUEST_CODE;" + code + ";" + uuid);
 								BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(TeamSpeakMain.class, msg);
