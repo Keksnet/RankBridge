@@ -81,6 +81,7 @@ public class TeamSpeakMain extends BridgeService {
 	 * @param code The code to add.
 	 * @param group The role to add.
 	 * @param uuid The uuid of the Player.
+	 * @param ip the ip of the Player.
 	 */
 	public void addCode(String code, Integer group, UUID uuid, String ip) {
 		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString(), ip));
