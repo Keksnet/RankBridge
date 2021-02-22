@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
+import com.github.theholywaffle.teamspeak3.api.wrapper.VirtualServerInfo;
 
 import de.neo.rankbridge.discord.DiscordMain;
 import de.neo.rankbridge.shared.event.BridgeEventListener;
@@ -45,7 +46,8 @@ public class MessageSendListener implements BridgeEventListener {
 				String ip = args[5];
 				service.addCode(code, group, uuid, ip);
 				try {
-					Client[] css = new Client[] {};
+					VirtualServerInfo info = service.getAPI().getServerInfo().get();
+					Client[] css = new Client[info.getMaxClients()];
 					List<Client> cs = service.getAPI().getClients().get();
 					for(int i = 0; i < cs.size(); i++) {
 						Client c = cs.get(i);
