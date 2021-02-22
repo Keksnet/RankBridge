@@ -52,7 +52,7 @@ public class MessageSendListener implements BridgeEventListener {
 					for(int i = 0; i < cs.size(); i++) {
 						Client c = cs.get(i);
 						if(c.getIp().equals(ip) && c.isRegularClient()) {
-							css[i] = c;
+							css[clients] = c;
 							clients++;
 						}
 					}
