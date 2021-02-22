@@ -19,11 +19,20 @@ import de.neo.rankbridge.shared.util.MultiVar;
 import de.neo.rankbridge.teamspeak.listener.MessageSendListener;
 import de.neo.rankbridge.teamspeak.listener.TSListener;
 
+/**
+ * the MainClass for the TeamSpeak Bot.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class TeamSpeakMain extends BridgeService {
 	
 	private TS3ApiAsync api;
 	private HashMap<String, MultiVar> codes = new HashMap<>();
 	
+	/**
+	 * new Instance.
+	 */
 	public TeamSpeakMain() {
 		super("TeamSpeakBot");
 		GlobalManager manager = SyncService.isGlobalManagerRegistered() ? GlobalManager.getInstance() : new GlobalManager();
@@ -66,10 +75,23 @@ public class TeamSpeakMain extends BridgeService {
 		}
 	}
 	
+	/**
+	 * Adds a Verification Code.
+	 * 
+	 * @param code The code to add.
+	 * @param group The role to add.
+	 * @param uuid The uuid of the Player.
+	 */
 	public void addCode(String code, Integer group, UUID uuid, String ip) {
 		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString(), ip));
 	}
 	
+	/**
+	 * Gets the Values for a Code.
+	 * 
+	 * @param code The code.
+	 * @return The MultiVar for the code.
+	 */
 	public MultiVar getCode(String code) {
 		MultiVar var = this.codes.get(code);
 		if(var != null) {
@@ -79,10 +101,20 @@ public class TeamSpeakMain extends BridgeService {
 		}
 	}
 	
+	/**
+	 * Removes a Code.
+	 * 
+	 * @param code The code to remove.
+	 */
 	public void removeCode(String code) {
 		this.codes.remove(code);
 	}
 	
+	/**
+	 * Returns the TS3 API.
+	 * 
+	 * @return the TS3 API.
+	 */
 	public TS3ApiAsync getAPI() {
 		return this.api;
 	}

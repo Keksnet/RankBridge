@@ -29,11 +29,20 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
+/**
+ * The mainclass for the BungeeCord plugin.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class BungeeMain extends Plugin{
 	
 	private Configuration config;
 	private HashMap<ProxiedPlayer, String> codes;
 	
+	/**
+	 * Runs when the Plugin is enbled.
+	 */
 	public void onEnable() {
 		GlobalManager manager = SyncService.isGlobalManagerRegistered() ? GlobalManager.getInstance() : new GlobalManager();
 		SyncService.registerGlobalManager();
@@ -69,10 +78,18 @@ public class BungeeMain extends Plugin{
 		manager.getEventHandler().executeEvent(readyEvent);
 	}
 	
+	/**
+	 * Returns the Configuration.
+	 * 
+	 * @return the Configuration.
+	 */
 	public Configuration getConfig() {
 		return this.config;
 	}
 	
+	/**
+	 * Loads the Configuration out of the File.
+	 */
 	public void loadConfig() {
 		try {
 			if(!getDataFolder().exists()) {
@@ -123,6 +140,12 @@ public class BungeeMain extends Plugin{
 		}
 	}
 	
+	/**
+	 * Adds a Verficationcode.
+	 * 
+	 * @param code the code.
+	 * @param uuid the uuid of the player.
+	 */
 	public void addCode(String code, String uuid) {
 		if(this.codes.containsKey(getProxy().getPlayer(UUID.fromString(uuid)))) {
 			removeCode(uuid);
@@ -130,10 +153,21 @@ public class BungeeMain extends Plugin{
 		this.codes.put(getProxy().getPlayer(UUID.fromString(uuid)), code);
 	}
 	
+	/**
+	 * Removes a code in this class.
+	 * 
+	 * @param code the code.
+	 * @param uuid the uuid of the player.
+	 */
 	public void removeCodeSingle(String code, String uuid) {
 		this.codes.remove(getProxy().getPlayer(UUID.fromString(uuid)), code);
 	}
 	
+	/**
+	 * Sends a message to all services to remove the code.
+	 * 
+	 * @param uuid the uuid of the player.
+	 */
 	public void removeCode(String uuid) {
 		BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.MINECRAFT);
 		msg.setContent("INVOKE;" + this.codes.get(getProxy().getPlayer(UUID.fromString(uuid))));

@@ -18,6 +18,7 @@ public abstract class BridgeMessageEvent extends BridgeEvent{
 	 * New BridgeMessageEvent.
 	 * 
 	 * @param sender Sender of the Event.
+	 * @param message Message in the Event.
 	 */
 	public BridgeMessageEvent(Class<? extends BridgeService> sender, BridgeMessage<?> message) {
 		super(sender);

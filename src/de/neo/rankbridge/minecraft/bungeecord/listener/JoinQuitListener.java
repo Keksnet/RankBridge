@@ -7,8 +7,19 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+/**
+ * Listens for disconnecting players.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class JoinQuitListener implements Listener {
 	
+	/**
+	 * Executes the Event.
+	 * 
+	 * @param e The Event
+	 */
 	@EventHandler
 	public void onQuit(PlayerDisconnectEvent e) {
 		String uuid = e.getPlayer().getUniqueId().toString();

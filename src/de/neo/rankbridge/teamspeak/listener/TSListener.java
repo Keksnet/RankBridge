@@ -27,6 +27,12 @@ import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 import de.neo.rankbridge.shared.util.MultiVar;
 import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
+/**
+ * Listens for TS3 Events.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class TSListener implements TS3Listener {
 	
 	private TeamSpeakMain main;

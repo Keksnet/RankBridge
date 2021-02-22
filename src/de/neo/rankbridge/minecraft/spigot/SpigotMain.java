@@ -29,10 +29,19 @@ import de.neo.rankbridge.shared.message.BridgeMessage;
 import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
+/**
+ * The MainClass for the Spigot plugin.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class SpigotMain extends JavaPlugin {
 	
 	private HashMap<OfflinePlayer, String> codes;
 	
+	/**
+	 * Runs when the plugin is enabled.
+	 */
 	public void onEnable() {
 		GlobalManager manager = SyncService.isGlobalManagerRegistered() ? GlobalManager.getInstance() : new GlobalManager();
 		SyncService.registerGlobalManager();
@@ -72,6 +81,9 @@ public class SpigotMain extends JavaPlugin {
 		manager.getEventHandler().executeEvent(readyEvent);
 	}
 	
+	/**
+	 * Loads the Configuration.
+	 */
 	public void loadConfig() {
 		try {
 			Configuration config = getConfig();
@@ -119,6 +131,12 @@ public class SpigotMain extends JavaPlugin {
 		}
 	}
 	
+	/**
+	 * Adds a Verificationcode to the class.
+	 * 
+	 * @param code the code
+	 * @param uuid the uuid of the player.
+	 */
 	public void addCode(String code, String uuid) {
 		if(this.codes.containsKey(Bukkit.getOfflinePlayer(UUID.fromString(uuid)))) {
 			removeCode(uuid);
@@ -126,10 +144,21 @@ public class SpigotMain extends JavaPlugin {
 		this.codes.put(Bukkit.getOfflinePlayer(UUID.fromString(uuid)), code);
 	}
 	
+	/**
+	 * Removes a Code from the class.
+	 * 
+	 * @param code the code
+	 * @param uuid the uuid of the player
+	 */
 	public void removeCodeSingle(String code, String uuid) {
 		this.codes.remove(Bukkit.getOfflinePlayer(UUID.fromString(uuid)), code);
 	}
 	
+	/**
+	 * Sends a message to all services to remove the code.
+	 * 
+	 * @param uuid the uuid of the player.
+	 */
 	public void removeCode(String uuid) {
 		BridgeMessage<String> msg = new BridgeMessage<>(ConversationMember.MINECRAFT);
 		msg.setContent("INVOKE;" + this.codes.get(Bukkit.getOfflinePlayer(UUID.fromString(uuid))));

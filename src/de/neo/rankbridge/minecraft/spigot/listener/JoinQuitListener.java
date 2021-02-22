@@ -8,8 +8,19 @@ import de.neo.rankbridge.minecraft.spigot.SpigotMain;
 import de.neo.rankbridge.minecraft.spigot.SpigotService;
 import de.neo.rankbridge.shared.manager.GlobalManager;
 
+/**
+ * Listens for disconnecting players.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class JoinQuitListener implements Listener {
 	
+	/**
+	 * Executes the Event.
+	 * 
+	 * @param e the Event.
+	 */
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
 		String uuid = e.getPlayer().getUniqueId().toString();

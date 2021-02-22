@@ -19,8 +19,17 @@ import de.neo.rankbridge.shared.manager.services.ExternalService;
 import de.neo.rankbridge.shared.message.BridgeMessage;
 import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 
+/**
+ * The /verify command.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class SpigotVerify implements CommandExecutor {
-
+	
+	/**
+	 * Executes the command.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

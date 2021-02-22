@@ -18,12 +18,24 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
+/**
+ * The /verify Command.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class BungeeVerify extends Command {
-
+	
+	/**
+	 * New instance of the Command.
+	 */
 	public BungeeVerify() {
 		super("verify", "system.verify", new String[] {"verify-ts", "verify-dc"});
 	}
-
+	
+	/**
+	 * Executes the Command.
+	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public void execute(CommandSender sender, String[] args) {

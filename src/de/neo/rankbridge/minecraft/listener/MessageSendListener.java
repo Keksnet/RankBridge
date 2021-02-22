@@ -17,14 +17,25 @@ import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+/**
+ * Listens for a Message from other Services.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class MessageSendListener implements BridgeEventListener {
 	
 	private MinecraftType type;
 	
+	/**
+	 * New instance.
+	 * 
+	 * @param type the Type of Minecraft.
+	 */
 	public MessageSendListener(MinecraftType type) {
 		this.type = type;
 	}
-
+	
 	@Override
 	public void execute(BridgeEvent event) {
 		BridgeMessageSendEvent e = (BridgeMessageSendEvent) event;

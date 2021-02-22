@@ -30,11 +30,20 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
+/**
+ * The mainclass for the DiscordBot.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class DiscordMain extends BridgeService {
 	
 	private JDA jda;
 	private HashMap<String, MultiVar> codes;
 	
+	/**
+	 * New Instance.
+	 */
 	public DiscordMain() {
 		super("DiscordBot");
 		try {
@@ -77,10 +86,23 @@ public class DiscordMain extends BridgeService {
 		}
 	}
 	
+	/**
+	 * Adds a Verification Code.
+	 * 
+	 * @param code The code to add.
+	 * @param group The role to add.
+	 * @param uuid The uuid of the Player.
+	 */
 	public void addCode(String code, Long group, UUID uuid) {
 		this.codes.put(code, new MultiVar(String.valueOf(group), uuid.toString()));
 	}
 	
+	/**
+	 * Gets the Values for a Code.
+	 * 
+	 * @param code The code.
+	 * @return The MultiVar for the code.
+	 */
 	public MultiVar getCode(String code) {
 		if(this.codes.containsKey(code.replace(" ", ""))) {
 			return this.codes.get(code.replace(" ", ""));
@@ -89,10 +111,21 @@ public class DiscordMain extends BridgeService {
 		}
 	}
 	
+	/**
+	 * Removes a Code.
+	 * 
+	 * @param code The code to remove.
+	 */
 	public void removeCode(String code) {
 		this.codes.remove(code);
 	}
 	
+	
+	/**
+	 * Gets the JDA.
+	 * 
+	 * @return the JDA.
+	 */
 	public JDA getJDA() {
 		return this.jda;
 	}

@@ -10,6 +10,12 @@ import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.manager.services.BridgeService;
 import de.neo.rankbridge.shared.manager.services.ExternalService;
 
+/**
+ * The Manager for Discord and Teamspeak permissions.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class PermissionManager {
 	
 	private HashMap<String, Long> discord_groups;
@@ -22,6 +28,11 @@ public class PermissionManager {
 	
 	private static PermissionManager INSTANCE;
 	
+	/**
+	 * New Instance.
+	 * 
+	 * @param mgr the MinecraftManager.
+	 */
 	@SuppressWarnings("unchecked")
 	public PermissionManager(MinecraftManager mgr) {
 		INSTANCE = this;
@@ -51,26 +62,63 @@ public class PermissionManager {
 		}
 	}
 	
+	/**
+	 * Returns a permission by role.
+	 * 
+	 * @param l the role.
+	 * @return the permission.
+	 */
 	public String getDiscordGroup(Long l) {
 		return this.group_discord.get(l);
 	}
 	
+	/**
+	 * Returns a role by permission.
+	 * 
+	 * @param s the permission.
+	 * @return the role.
+	 */
 	public Long getDiscordGroup(String s) {
 		return this.discord_groups.get(s);
 	}
 	
+	/**
+	 * Returns a permission by group.
+	 * 
+	 * @param l the group.
+	 * @return the permission.
+	 */
 	public String getTeamspeakGroup(Integer l) {
 		return this.group_teamspeak.get(l);
 	}
 	
+	/**
+	 * Returns a group by permission.
+	 * 
+	 * @param s the permission.
+	 * @return the group.
+	 */
 	public Integer getTeamspeakGroup(String s) {
 		return this.teamspeak_group.get(s);
 	}
 	
+	/**
+	 * Is the group synchronized?
+	 * 
+	 * @param s the group
+	 * @return Boolean whether the group is synchronized or not.
+	 */
 	public Boolean isTeamspeakGroup(Integer s) {
 		return this.teamspeak_group.containsValue(s);
 	}
 	
+	/**
+	 * Updates the Teamspeak groups.
+	 * 
+	 * @param s1 the Groups as String.
+	 * @param uuid the Minecraft uuid.
+	 * @return Boolean whether the verification is up to date or not.
+	 */
 	public Boolean checkTeamspeak(String s1, String uuid) {
 		for(String s : s1.split(",")) {
 			if(this.teamspeak_group.containsValue(Integer.valueOf(s))) {
@@ -82,6 +130,11 @@ public class PermissionManager {
 		return false;
 	}
 	
+	/**
+	 * Returns the Instance.
+	 * 
+	 * @return the instance.
+	 */
 	public static PermissionManager getInstance() {
 		return INSTANCE;
 	}

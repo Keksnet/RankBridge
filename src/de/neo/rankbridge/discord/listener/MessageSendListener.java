@@ -9,6 +9,12 @@ import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
 import de.neo.rankbridge.shared.manager.GlobalManager;
 import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 
+/**
+ * Listen for the MessageSendEvent.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class MessageSendListener implements BridgeEventListener {
 	
 	@Override

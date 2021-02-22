@@ -17,6 +17,12 @@ import de.neo.rankbridge.shared.message.BridgeMessage;
 import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 
+/**
+ * Listens for a Message.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class MessageSendListener implements BridgeEventListener {
 
 	@Override

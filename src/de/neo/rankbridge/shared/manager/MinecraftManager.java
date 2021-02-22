@@ -29,18 +29,38 @@ import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.util.Tristate;
 import net.md_5.bungee.config.Configuration;
 
+/**
+ * The Manager for Minecraft.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class MinecraftManager {
 	
 	private static MinecraftManager INSTANCE;
 	
+	/**
+	 * New Instance.
+	 */
 	public MinecraftManager() {
 		INSTANCE = this;
 	}
 	
+	/**
+	 * Returns the instance of the MinecraftManager.
+	 * 
+	 * @return the Instance.
+	 */
 	public static MinecraftManager getInstance() {
 		return INSTANCE;
 	}
 	
+	/**
+	 * Returns the Name of an player by uuid.
+	 * 
+	 * @param uuid the uuid of the Player.
+	 * @return the name of the Player.
+	 */
 	public String getName(String uuid) {
 		GlobalManager manager = GlobalManager.getInstance();
 		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
@@ -54,6 +74,13 @@ public class MinecraftManager {
 		return null;
 	}
 	
+	/**
+	 * Checks if a players has a Permission.
+	 * 
+	 * @param uuid the uuid of the player.
+	 * @param perm the permission to check.
+	 * @return Boolean whether the player has the permission or not.
+	 */
 	public Boolean hasPermission(String uuid, String perm) {
 		GlobalManager manager = GlobalManager.getInstance();
 		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
@@ -82,6 +109,12 @@ public class MinecraftManager {
 		return false;
 	}
 	
+	/**
+	 * Returns a String out of the config.
+	 * 
+	 * @param path the path to look at.
+	 * @return the value of the path.
+	 */
 	public String getString(String path) {
 		GlobalManager manager = GlobalManager.getInstance();
 		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
@@ -99,6 +132,12 @@ public class MinecraftManager {
 		return null;
 	}
 	
+	/**
+	 * Returns an Integer out of the config.
+	 * 
+	 * @param path the path to look at.
+	 * @return the value of the path.
+	 */
 	public Integer getInt(String path) {
 		GlobalManager manager = GlobalManager.getInstance();
 		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
@@ -116,6 +155,12 @@ public class MinecraftManager {
 		return null;
 	}
 	
+	/**
+	 * Returns a Long out of the config.
+	 * 
+	 * @param path the path to look at.
+	 * @return the value of the path.
+	 */
 	public Long getLong(String path) {
 		GlobalManager manager = GlobalManager.getInstance();
 		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
@@ -133,6 +178,12 @@ public class MinecraftManager {
 		return null;
 	}
 	
+	/**
+	 * Returns the List out of the config.
+	 * 
+	 * @param path the path to look at.
+	 * @return the value of the path.
+	 */
 	public ArrayList<?> getList(String path) {
 		GlobalManager manager = GlobalManager.getInstance();
 		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
@@ -150,6 +201,12 @@ public class MinecraftManager {
 		return null;
 	}
 	
+	/**
+	 * Makes a GET Request to get the name of an OfflinePlayer in BungeeCord.
+	 * 
+	 * @param uuid the uuid of the player.
+	 * @return the name of the player.
+	 */
 	private String getBungeeName(String uuid) {
 		try {
 			URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", ""));
@@ -164,6 +221,13 @@ public class MinecraftManager {
 		return null;
 	}
 	
+	/**
+	 * parses the response.
+	 * 
+	 * @param is the InputStream to parse.
+	 * @return the parsed String.
+	 * @throws IOException something went wrong.
+	 */
 	private String parse(InputStream is) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		StringBuilder sb = new StringBuilder();

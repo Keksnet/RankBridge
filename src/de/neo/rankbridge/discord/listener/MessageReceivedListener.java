@@ -15,8 +15,17 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * Listen for the MessageReceivedEvent.
+ * 
+ * @author Neo8
+ * @version 1.0
+ */
 public class MessageReceivedListener extends ListenerAdapter {
 	
+	/**
+	 * Executes the Event.
+	 */
 	@Override
 	public void onMessageReceived(MessageReceivedEvent e) {
 		if(e.getChannelType().equals(ChannelType.PRIVATE)) {
