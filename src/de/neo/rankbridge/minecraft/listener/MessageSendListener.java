@@ -54,7 +54,7 @@ public class MessageSendListener implements BridgeEventListener {
 		}
 		GlobalManager manager = GlobalManager.getInstance();
 		if(e.getMessage().getContentUniversal().getAsString().startsWith("REQUEST_CODE;")) {
-			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
+			/*String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 3) {
 				MinecraftManager mgr = MinecraftManager.getInstance();
 				String code = args[1];
@@ -71,7 +71,7 @@ public class MessageSendListener implements BridgeEventListener {
 						p.sendMessage(new TextComponent(mgr.getString("messages.minecraft.code_info").replace("%code%", code)));
 					}
 				}
-			}
+			}*/
 		}else if(e.getMessage().getContentUniversal().getAsString().startsWith("VERIFIED;")) {
 			String[] args = e.getMessage().getContentUniversal().getAsString().split(";");
 			if(args.length == 4) {

@@ -62,6 +62,7 @@ public class SpigotVerify implements CommandExecutor {
 				main.addCode(code, p.getUniqueId().toString());
 				MinecraftManager mgr = MinecraftManager.getInstance();
 				p.sendMessage(mgr.getString("messages.minecraft.verify_info"));
+				p.getPlayer().sendMessage(mgr.getString("messages.minecraft.code_info").replace("%code%", code));
 				msg.setContent("ADD_CODE;" + code + ";" + String.valueOf(groupTS) + ";" + String.valueOf(groupDC) + ";" + p.getUniqueId().toString() + ";" + p.getAddress().getAddress().getHostAddress());
 				BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(SpigotService.class, msg);
 				GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
