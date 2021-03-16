@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.Configuration;
@@ -42,6 +43,7 @@ public class SpigotMain extends JavaPlugin {
 	/**
 	 * Runs when the plugin is enabled.
 	 */
+	@SuppressWarnings("unused")
 	public void onEnable() {
 		GlobalManager manager = SyncService.isGlobalManagerRegistered() ? GlobalManager.getInstance() : new GlobalManager();
 		SyncService.registerGlobalManager();
@@ -79,6 +81,9 @@ public class SpigotMain extends JavaPlugin {
 		
 		MinecraftReadyEvent readyEvent = new MinecraftReadyEvent(SpigotService.class, MinecraftType.SPIGOT);
 		manager.getEventHandler().executeEvent(readyEvent);
+		
+		Integer pluginId = 10686;
+		Metrics metrics = new Metrics(this, pluginId);
 	}
 	
 	/**

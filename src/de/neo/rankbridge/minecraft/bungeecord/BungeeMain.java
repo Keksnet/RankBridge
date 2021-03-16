@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.bstats.bungeecord.Metrics;
+
 import de.neo.rankbridge.SyncService;
 import de.neo.rankbridge.discord.DiscordMain;
 import de.neo.rankbridge.minecraft.MinecraftService;
@@ -43,6 +45,7 @@ public class BungeeMain extends Plugin{
 	/**
 	 * Runs when the Plugin is enbled.
 	 */
+	@SuppressWarnings("unused")
 	public void onEnable() {
 		GlobalManager manager = SyncService.isGlobalManagerRegistered() ? GlobalManager.getInstance() : new GlobalManager();
 		SyncService.registerGlobalManager();
@@ -76,6 +79,9 @@ public class BungeeMain extends Plugin{
 		
 		MinecraftReadyEvent readyEvent = new MinecraftReadyEvent(BungeeService.class, MinecraftType.BUNGEECORD);
 		manager.getEventHandler().executeEvent(readyEvent);
+		
+		Integer pluginId = 10688;
+		Metrics metrics = new Metrics(this, pluginId);
 	}
 	
 	/**
