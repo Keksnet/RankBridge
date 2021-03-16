@@ -127,6 +127,7 @@ public class SpigotMain extends JavaPlugin {
 				config.set("messages.minecraft.verify_info", "verify_info message");
 				config.set("messages.minecraft.code_info", "code_info message");
 				config.set("messages.minecraft.verified", "verified message");
+				saveConfig();
 				Bukkit.getPluginManager().disablePlugin(this);
 				System.out.println("Bitte füllen sie die Config aus.");
 				return;

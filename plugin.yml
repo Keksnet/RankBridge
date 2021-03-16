@@ -1,5 +1,5 @@
 name: RankBridge_Spigot
-version: 1.0
+version: 1.2
 api-version: 1.16
 author: Neo8
 depend: [LuckPerms]
