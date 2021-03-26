@@ -103,13 +103,41 @@ public class PermissionManager {
 	}
 	
 	/**
+	 * Is the role synchronized?
+	 * 
+	 * @param l the role
+	 * @return Boolean whether the role is synchronized or not.
+	 */
+	public Boolean isDiscordRole(Long l) {
+		return this.discord_groups.containsValue(l);
+	}
+	
+	/**
 	 * Is the group synchronized?
 	 * 
-	 * @param s the group
+	 * @param l the group
 	 * @return Boolean whether the group is synchronized or not.
 	 */
-	public Boolean isTeamspeakGroup(Integer s) {
-		return this.teamspeak_group.containsValue(s);
+	public Boolean isTeamspeakGroup(Integer l) {
+		return this.teamspeak_group.containsValue(l);
+	}
+	
+	/**
+	 * Formats raw values and invokes {@link de.neo.rankbridge.shared.manager.PermissionManager#checkTeamspeak(String, String)}
+	 * 
+	 * @param groups array of integers with groups.
+	 * @param uuid the uuid of the player. only used to give this to {@link de.neo.rankbridge.shared.manager.PermissionManager#checkTeamspeak(String, String)}
+	 * @return return value of {@link de.neo.rankbridge.shared.manager.PermissionManager#checkTeamspeak(String, String)}
+	 */
+	public Boolean checkTeamspeak(int[] groups, String uuid) {
+		String group = "";
+		for(int i : groups) {
+			group += String.valueOf(i);
+			if(i != groups[groups.length - 1]) {
+				group += ",";
+			}
+		}
+		return checkTeamspeak(group, uuid);
 	}
 	
 	/**

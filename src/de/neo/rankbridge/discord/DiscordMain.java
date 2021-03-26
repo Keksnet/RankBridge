@@ -6,12 +6,15 @@ import java.util.UUID;
 
 import javax.security.auth.login.LoginException;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.neo.rankbridge.SyncService;
+import de.neo.rankbridge.discord.listener.MemberJoinListener;
 import de.neo.rankbridge.discord.listener.MessageReceivedListener;
 import de.neo.rankbridge.discord.listener.MessageSendListener;
+import de.neo.rankbridge.discord.listener.RoleUpdateListener;
 import de.neo.rankbridge.minecraft.MinecraftService;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
@@ -21,6 +24,7 @@ import de.neo.rankbridge.shared.event.events.DiscordReadyEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
 import de.neo.rankbridge.shared.event.events.message.BridgeMessageSendEvent;
 import de.neo.rankbridge.shared.manager.GlobalManager;
+import de.neo.rankbridge.shared.manager.MinecraftManager;
 import de.neo.rankbridge.shared.manager.services.BridgeService;
 import de.neo.rankbridge.shared.util.MultiVar;
 import net.dv8tion.jda.api.JDA;
@@ -29,6 +33,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.md_5.bungee.config.Configuration;
 
 /**
  * The mainclass for the DiscordBot.
@@ -57,6 +62,7 @@ public class DiscordMain extends BridgeService {
 			manager.getServiceManager().register(this);
 			if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
 				MinecraftService mcService = (MinecraftService) manager.getServiceManager().getService(MinecraftService.class);
+				MinecraftManager mm = MinecraftManager.getInstance();
 				String TOKEN = "";
 				String activity = "";
 				if(mcService.getMinecraftType().equals(MinecraftType.SPIGOT)) {
@@ -75,6 +81,18 @@ public class DiscordMain extends BridgeService {
 				builder.setEnabledIntents(EnumSet.allOf(GatewayIntent.class));
 				builder.setMemberCachePolicy(MemberCachePolicy.ALL);
 				builder.addEventListeners(new MessageReceivedListener());
+				if(mm.isRunningOnBungeecord()) {
+					Configuration config = (Configuration) mm.getConfig();
+					if(config.getBoolean("discord.external_sync")) {
+						builder.addEventListeners(new RoleUpdateListener());
+					}
+				}else {
+					FileConfiguration config = (FileConfiguration) mm.getConfig();
+					if(config.getBoolean("discord.external_sync")) {
+						builder.addEventListeners(new RoleUpdateListener());
+					}
+				}
+				builder.addEventListeners(new MemberJoinListener());
 				jda = builder.build();
 				manager.getEventHandler().registerListener(BridgeMessageSendEvent.class, new MessageSendListener());
 				DiscordReadyEvent readyEvent = new DiscordReadyEvent(DiscordMain.class);

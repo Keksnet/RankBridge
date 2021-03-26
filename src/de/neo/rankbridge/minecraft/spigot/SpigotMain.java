@@ -39,6 +39,7 @@ import de.neo.rankbridge.teamspeak.TeamSpeakMain;
 public class SpigotMain extends JavaPlugin {
 	
 	private HashMap<OfflinePlayer, String> codes;
+	private HashMap<UUID, Long> delay;
 	
 	/**
 	 * Runs when the plugin is enabled.
@@ -75,6 +76,7 @@ public class SpigotMain extends JavaPlugin {
 		}
 		
 		this.codes = new HashMap<>();
+		this.delay = new HashMap<>();
 		
 		getCommand("verify").setExecutor(new SpigotVerify());
 		Bukkit.getPluginManager().registerEvents(new JoinQuitListener(), this);
@@ -99,6 +101,7 @@ public class SpigotMain extends JavaPlugin {
 			if(!f.exists()) {
 				Files.copy(getResource("spigot_config.yml"), f.toPath());
 				config.set("discord.enable", false);
+				config.set("discord.external_sync", false);
 				config.set("discord.token", "BOT_TOKEN_HERE");
 				config.set("discord.activity", "verifing players");
 				config.set("discord.guild", 0l);
@@ -108,6 +111,8 @@ public class SpigotMain extends JavaPlugin {
 				config.set("discord.groups", discord_group);
 				
 				config.set("teamspeak.enable", false);
+				config.set("teamspeak.external_sync", false);
+				config.set("teamspeak.external_sync_delay", 30l);
 				config.set("teamspeak.user", "username");
 				config.set("teamspeak.password", "password");
 				config.set("teamspeak.host", "127.0.0.1");
@@ -171,5 +176,33 @@ public class SpigotMain extends JavaPlugin {
 		BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(BungeeService.class, msg);
 		GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
 		this.codes.remove(Bukkit.getOfflinePlayer(UUID.fromString(uuid)), this.codes.get(Bukkit.getOfflinePlayer(UUID.fromString(uuid))));
+	}
+	
+	/**
+	 * Has this player an delay?
+	 * 
+	 * @param uuid the uuid of the player.
+	 * @return Boolean whether the players delay is done or not.
+	 */
+	public Boolean isDelayDone(UUID uuid) {
+		return (System.currentTimeMillis() / 1000) >= this.delay.get(uuid) + this.getConfig().getLong("teamspeak.external_sync_delay");
+	}
+	
+	/**
+	 * Resets the expired delay of this player.
+	 * 
+	 * @param uuid the uuid of the player.
+	 */
+	public void resetDelay(UUID uuid) {
+		this.delay.put(uuid, (System.currentTimeMillis() / 1000));
+	}
+	
+	/**
+	 * Removes this player from RAM (for clean usage).
+	 * 
+	 * @param uuid the uuid of the player.
+	 */
+	public void removeDelay(UUID uuid) {
+		this.delay.remove(uuid);
 	}
 }

@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.UUID;
-
 import javax.net.ssl.HttpsURLConnection;
 
 import org.bukkit.Bukkit;
@@ -25,6 +24,7 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedPermissionData;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.Node;
 import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.util.Tristate;
 import net.md_5.bungee.config.Configuration;
@@ -107,6 +107,68 @@ public class MinecraftManager {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Sets a permision to a player.
+	 * 
+	 * @param uuid the uuid of the player.
+	 * @param perm the permission to set.
+	 */
+	public void setPermission(String uuid, String perm) {
+		if(this.isRunningOnBungeecord()) {
+			BungeeMain bungee = (BungeeMain) GlobalManager.getInstance().getServiceManager().getService(BungeeService.class).getExternalService().getMain();
+			if(bungee.getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
+				LuckPerms lp = LuckPermsProvider.get();
+				QueryOptions options = lp.getContextManager().getQueryOptions(lp.getUserManager().getUser(UUID.fromString(uuid))).orElse(lp.getContextManager().getStaticQueryOptions());
+				if(!lp.getUserManager().getUser(UUID.fromString(uuid)).getCachedData().getPermissionData(options).checkPermission(perm).asBoolean()) {
+					lp.getUserManager().modifyUser(UUID.fromString(uuid), (User u) -> {
+						u.data().add(Node.builder(perm).build());
+					});
+				}
+			}
+		}else {
+			if(Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
+				LuckPerms lp = LuckPermsProvider.get();
+				QueryOptions options = lp.getContextManager().getQueryOptions(lp.getUserManager().getUser(UUID.fromString(uuid))).orElse(lp.getContextManager().getStaticQueryOptions());
+				if(!lp.getUserManager().getUser(UUID.fromString(uuid)).getCachedData().getPermissionData(options).checkPermission(perm).asBoolean()) {
+					lp.getUserManager().modifyUser(UUID.fromString(uuid), (User u) -> {
+						u.data().add(Node.builder(perm).build());
+					});
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Unsets a permision to a player.
+	 * 
+	 * @param uuid the uuid of the player.
+	 * @param perm the permission to unset.
+	 */
+	public void unsetPermission(String uuid, String perm) {
+		if(this.isRunningOnBungeecord()) {
+			BungeeMain bungee = (BungeeMain) GlobalManager.getInstance().getServiceManager().getService(BungeeService.class).getExternalService().getMain();
+			if(bungee.getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
+				LuckPerms lp = LuckPermsProvider.get();
+				QueryOptions options = lp.getContextManager().getQueryOptions(lp.getUserManager().getUser(UUID.fromString(uuid))).orElse(lp.getContextManager().getStaticQueryOptions());
+				if(lp.getUserManager().getUser(UUID.fromString(uuid)).getCachedData().getPermissionData(options).checkPermission(perm).asBoolean()) {
+					lp.getUserManager().modifyUser(UUID.fromString(uuid), (User u) -> {
+						u.data().remove(Node.builder(perm).build());
+					});
+				}
+			}
+		}else {
+			if(Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
+				LuckPerms lp = LuckPermsProvider.get();
+				QueryOptions options = lp.getContextManager().getQueryOptions(lp.getUserManager().getUser(UUID.fromString(uuid))).orElse(lp.getContextManager().getStaticQueryOptions());
+				if(lp.getUserManager().getUser(UUID.fromString(uuid)).getCachedData().getPermissionData(options).checkPermission(perm).asBoolean()) {
+					lp.getUserManager().modifyUser(UUID.fromString(uuid), (User u) -> {
+						u.data().remove(Node.builder(perm).build());
+					});
+				}
+			}
+		}
 	}
 	
 	/**
@@ -199,6 +261,63 @@ public class MinecraftManager {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Checks if the {@link de.neo.rankbridge.minecraft.MinecraftService} is registered.
+	 * If false you should not continue using this class.
+	 * 
+	 * @return Boolean whether the {@link de.neo.rankbridge.minecraft.MinecraftService} is registered or not.
+	 */
+	public Boolean isMinecraftServiceRegistered() {
+		return GlobalManager.getInstance().getServiceManager().isServiceRegistered(MinecraftService.class);
+	}
+	
+	/**
+	 * Checks if this plugin is running on Bungeecord.
+	 * If false, this plugin is running on Spigot.
+	 * 
+	 * @return Boolean whether this plugin is running on Bungeecord or not.
+	 */
+	public Boolean isRunningOnBungeecord() {
+		GlobalManager manager = GlobalManager.getInstance();
+		if(manager.getServiceManager().isServiceRegistered(MinecraftService.class)) {
+			MinecraftService mcService = (MinecraftService) manager.getServiceManager().getService(MinecraftService.class);
+			if(mcService.getMinecraftType().equals(MinecraftType.SPIGOT)) {
+				return false;
+			}else if(mcService.getMinecraftType().equals(MinecraftType.BUNGEECORD)) {
+				return true;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the Configuration of the plugin.
+	 * Uses {@link de.neo.rankbridge.shared.manager.MinecraftManager#getConfig(Boolean)}
+	 * 
+	 * @return The return of {@link de.neo.rankbridge.shared.manager.MinecraftManager#getConfig(Boolean)}
+	 */
+	public Object getConfig() {
+		return this.getConfig(this.isRunningOnBungeecord());
+	}
+	
+	/**
+	 * Returns the Configuration of the plugin.
+	 * 
+	 * @param isRunningOnBungeecord Boolean whether this plugin is running on Bungeecord or not.
+	 * @return An Object which is a {@link net.md_5.bungee.config.Configuration} or a {@link org.bukkit.configuration.file.FileConfiguration}
+	 */
+	public Object getConfig(Boolean isRunningOnBungeecord) {
+		if(isRunningOnBungeecord) {
+			BungeeMain bungee = (BungeeMain) GlobalManager.getInstance().getServiceManager().getService(BungeeService.class).getExternalService().getMain();
+			Configuration config = bungee.getConfig();
+			return config;
+		}else {
+			SpigotService spigot = (SpigotService) GlobalManager.getInstance().getServiceManager().getService(SpigotService.class);
+			FileConfiguration config = spigot.getMain().getConfig();
+			return config;
+		}
 	}
 	
 	/**

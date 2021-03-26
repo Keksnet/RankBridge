@@ -1,12 +1,17 @@
 package de.neo.rankbridge.minecraft.listener;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
+import de.neo.rankbridge.minecraft.spigot.SpigotMain;
+import de.neo.rankbridge.minecraft.spigot.SpigotService;
 import de.neo.rankbridge.shared.event.BridgeEventListener;
 import de.neo.rankbridge.shared.event.events.BridgeEvent;
 import de.neo.rankbridge.shared.event.events.MinecraftLoadEvent.MinecraftType;
@@ -16,6 +21,9 @@ import de.neo.rankbridge.shared.manager.MinecraftManager;
 import de.neo.rankbridge.shared.message.BridgeMessage.ConversationMember;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
 /**
  * Listens for a Message from other Services.
@@ -84,11 +92,31 @@ public class MessageSendListener implements BridgeEventListener {
 					if(p.isOnline()) {
 						p.getPlayer().sendMessage(mgr.getString("messages.minecraft.verified").replace("%user%", id));
 					}
+					FileConfiguration config = (FileConfiguration) mgr.getConfig();
+					if(e.getMessage().getSender().equals(ConversationMember.DISCORD)) {
+						config.set("users.verified.discord." + id, uuid);
+					}else if(e.getMessage().getSender().equals(ConversationMember.TEAMSPEAK)) {
+						config.set("users.verified.teamspeak." + id, uuid);
+					}
+					SpigotMain main = (SpigotMain) manager.getServiceManager().getService(SpigotService.class).getExternalService().getMain();
+					main.saveConfig();
+					main.removeCodeSingle(code, uuid);
 				}else if(type.equals(MinecraftType.BUNGEECORD)) {
 					BungeeMain main = (BungeeMain) manager.getServiceManager().getService(BungeeService.class).getExternalService().getMain();
 					ProxiedPlayer p = main.getProxy().getPlayer(UUID.fromString(uuid));
 					if(p != null && p.isConnected()) {
 						p.sendMessage(new TextComponent(mgr.getString("messages.minecraft.verified").replace("%user%", id)));
+					}
+					Configuration config = (Configuration) mgr.getConfig();
+					if(e.getMessage().getSender().equals(ConversationMember.DISCORD)) {
+						config.set("users.verified.discord." + id, uuid);
+					}else if(e.getMessage().getSender().equals(ConversationMember.TEAMSPEAK)) {
+						config.set("users.verified.teamspeak." + id, uuid);
+					}
+					try {
+						ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, new File(main.getDataFolder(), "config.yml"));
+					} catch (IOException e1) {
+						e1.printStackTrace();
 					}
 					main.removeCodeSingle(code, uuid);
 				}

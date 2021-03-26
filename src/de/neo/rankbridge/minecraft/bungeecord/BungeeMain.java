@@ -41,9 +41,10 @@ public class BungeeMain extends Plugin{
 	
 	private Configuration config;
 	private HashMap<ProxiedPlayer, String> codes;
+	private HashMap<UUID, Long> delay;
 	
 	/**
-	 * Runs when the Plugin is enbled.
+	 * Runs when the Plugin is enabled.
 	 */
 	@SuppressWarnings("unused")
 	public void onEnable() {
@@ -73,6 +74,7 @@ public class BungeeMain extends Plugin{
 		}
 		
 		this.codes = new HashMap<>();
+		this.delay = new HashMap<>();
 		
 		getProxy().getPluginManager().registerCommand(this, new BungeeVerify());
 		getProxy().getPluginManager().registerListener(this, new JoinQuitListener());
@@ -110,6 +112,7 @@ public class BungeeMain extends Plugin{
 			this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(f);
 			if(setup) {
 				this.config.set("discord.enable", false);
+				this.config.set("discord.external_sync", false);
 				this.config.set("discord.token", "BOT_TOKEN_HERE");
 				this.config.set("discord.activity", "verifing players");
 				this.config.set("discord.guild", 0l);
@@ -119,6 +122,8 @@ public class BungeeMain extends Plugin{
 				this.config.set("discord.groups", discord_group);
 				
 				this.config.set("teamspeak.enable", false);
+				this.config.set("teamspeak.external_sync", false);
+				this.config.set("teamspeak.external_sync.delay", 30l);
 				this.config.set("teamspeak.user", "username");
 				this.config.set("teamspeak.password", "password");
 				this.config.set("teamspeak.host", "127.0.0.1");
@@ -131,6 +136,7 @@ public class BungeeMain extends Plugin{
 				this.config.set("teamspeak.groups", teamspeak_group);
 				
 				this.config.set("messages.discord.verified", "verified message");
+				this.config.set("messages.discord.verify_info", "verify_info message");
 				
 				this.config.set("messages.teamspeak.verify_info", "verify_info message");
 				this.config.set("messages.teamspeak.verified", "verified message");
@@ -180,5 +186,33 @@ public class BungeeMain extends Plugin{
 		BridgeMessageSendEvent sendEvent = new BridgeMessageSendEvent(BungeeService.class, msg);
 		GlobalManager.getInstance().getEventHandler().executeEvent(sendEvent);
 		this.codes.remove(getProxy().getPlayer(UUID.fromString(uuid)), this.codes.get(getProxy().getPlayer(UUID.fromString(uuid))));
+	}
+	
+	/**
+	 * Has this player an delay?
+	 * 
+	 * @param uuid the uuid of the player.
+	 * @return Boolean whether the players delay is done or not.
+	 */
+	public Boolean isDelayDone(UUID uuid) {
+		return (System.currentTimeMillis() / 1000) >= this.delay.get(uuid) + this.config.getLong("teamspeak.external_sync_delay");
+	}
+	
+	/**
+	 * Resets the expired delay of this player.
+	 * 
+	 * @param uuid the uuid of the player.
+	 */
+	public void resetDelay(UUID uuid) {
+		this.delay.put(uuid, (System.currentTimeMillis() / 1000));
+	}
+	
+	/**
+	 * Removes this player from RAM (for clean usage).
+	 * 
+	 * @param uuid the uuid of the player.
+	 */
+	public void removeDelay(UUID uuid) {
+		this.delay.remove(uuid);
 	}
 }
