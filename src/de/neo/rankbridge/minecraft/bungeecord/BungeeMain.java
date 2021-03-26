@@ -123,7 +123,7 @@ public class BungeeMain extends Plugin{
 				
 				this.config.set("teamspeak.enable", false);
 				this.config.set("teamspeak.external_sync", false);
-				this.config.set("teamspeak.external_sync.delay", 30l);
+				this.config.set("teamspeak.external_sync_delay", 30l);
 				this.config.set("teamspeak.user", "username");
 				this.config.set("teamspeak.password", "password");
 				this.config.set("teamspeak.host", "127.0.0.1");
