@@ -1,6 +1,7 @@
 package de.neo.rankbridge.shared.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import de.neo.rankbridge.minecraft.MinecraftService;
@@ -150,12 +151,49 @@ public class PermissionManager {
 	public Boolean checkTeamspeak(String s1, String uuid) {
 		for(String s : s1.split(",")) {
 			if(this.teamspeak_group.containsValue(Integer.valueOf(s))) {
-				if(this.mgr.hasPermission(uuid, getTeamspeakGroup(Integer.valueOf(s)))) {
-					return true;
+				if(!this.mgr.hasPermission(uuid, getTeamspeakGroup(Integer.valueOf(s)))) {
+					return false;
 				}
 			}
 		}
-		return false;
+		return true;
+	}
+	
+	/**
+	 * Formats raw values and invokes {@link de.neo.rankbridge.shared.manager.PermissionManager#checkMinecraft(String, String)}
+	 * 
+	 * @param groups array of integers with groups.
+	 * @param uuid the uuid of the player. only used to give this to {@link de.neo.rankbridge.shared.manager.PermissionManager#checkMinecraft(String, String)}
+	 * @return return value of {@link de.neo.rankbridge.shared.manager.PermissionManager#checkMinecraft(String, String)}
+	 */
+	public Boolean checkMinecraft(int[] groups, String uuid) {
+		String group = "";
+		for(int i : groups) {
+			group += String.valueOf(i);
+			if(i != groups[groups.length - 1]) {
+				group += ",";
+			}
+		}
+		return checkMinecraft(group, uuid);
+	}
+	
+	/**
+	 * Updates the Minecraft permission.
+	 * 
+	 * @param s1 the Groups as String.
+	 * @param uuid the Minecraft uuid.
+	 * @return Boolean whether the verification is up to date or not.
+	 */
+	public Boolean checkMinecraft(String s1, String uuid) {
+		ArrayList<String> groups = (ArrayList<String>) Arrays.asList(s1.split(","));
+		for(int group : this.group_teamspeak.keySet()) {
+			if(!groups.contains(String.valueOf(group))) {
+				if(this.mgr.hasPermission(uuid, getTeamspeakGroup(group))) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**

@@ -62,7 +62,7 @@ public class JoinQuitListener implements Listener {
 						}
 						if(c != null) {
 							l.warn("NN");
-							if(!permmgr.checkTeamspeak(c.getServerGroups(), uuid)) {
+							if(!permmgr.checkMinecraft(c.getServerGroups(), uuid)) {
 								l.warn("U2D");
 								for(int i : c.getServerGroups()) {
 									if(permmgr.isTeamspeakGroup(i)) {
