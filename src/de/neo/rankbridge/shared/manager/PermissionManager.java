@@ -3,6 +3,7 @@ package de.neo.rankbridge.shared.manager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import de.neo.rankbridge.minecraft.MinecraftService;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
@@ -185,7 +186,7 @@ public class PermissionManager {
 	 * @return Boolean whether the verification is up to date or not.
 	 */
 	public Boolean checkMinecraft(String s1, String uuid) {
-		ArrayList<String> groups = (ArrayList<String>) Arrays.asList(s1.split(","));
+		List<String> groups = (List<String>) Arrays.asList(s1.split(","));
 		for(int group : this.group_teamspeak.keySet()) {
 			if(!groups.contains(String.valueOf(group))) {
 				if(this.mgr.hasPermission(uuid, getTeamspeakGroup(group))) {
