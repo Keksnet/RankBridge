@@ -37,6 +37,7 @@ public class JoinQuitListener implements Listener {
 	@EventHandler
 	public void onSwitch(ServerConnectEvent e) {
 		Logger l = LoggerFactory.getLogger("TS-VER");
+		l.warn("HANDLE");
 		GlobalManager manager = GlobalManager.getInstance();
 		String uuid = e.getPlayer().getUniqueId().toString();
 		BungeeMain main = (BungeeMain) GlobalManager.getInstance().getServiceManager().getService(BungeeService.class).getExternalService().getMain();
@@ -54,14 +55,15 @@ public class JoinQuitListener implements Listener {
 							if(config.contains("users.verified.teamspeak." + c1.getUniqueIdentifier())) {
 								if(config.getString("users.verified.teamspeak." + c1.getUniqueIdentifier()).equalsIgnoreCase(uuid)) {
 									c = c1;
-									l.debug("found " + c1.getUniqueIdentifier());
+									l.warn("found " + c1.getUniqueIdentifier());
 									break;
 								}
 							}
 						}
 						if(c != null) {
+							l.warn("NN");
 							if(!permmgr.checkTeamspeak(c.getServerGroups(), uuid)) {
-								l.debug("U2D");
+								l.warn("U2D");
 								for(int i : c.getServerGroups()) {
 									if(permmgr.isTeamspeakGroup(i)) {
 										if(!mm.hasPermission(uuid, permmgr.getTeamspeakGroup(i))) {
@@ -70,9 +72,10 @@ public class JoinQuitListener implements Listener {
 									}
 								}
 							}else {
-								l.debug("!U2D");
+								l.warn("!U2D");
 							}
 						}else {
+							l.warn("N");
 							return;
 						}
 					} catch (InterruptedException e1) {
