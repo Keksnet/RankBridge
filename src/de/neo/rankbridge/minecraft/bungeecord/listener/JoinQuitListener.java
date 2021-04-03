@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
@@ -37,8 +34,6 @@ public class JoinQuitListener implements Listener {
 	 */
 	@EventHandler
 	public void onSwitch(ServerConnectEvent e) {
-		Logger l = LoggerFactory.getLogger("TS-VER");
-		l.warn("HANDLE");
 		GlobalManager manager = GlobalManager.getInstance();
 		String uuid = e.getPlayer().getUniqueId().toString();
 		BungeeMain main = (BungeeMain) GlobalManager.getInstance().getServiceManager().getService(BungeeService.class).getExternalService().getMain();
@@ -56,15 +51,12 @@ public class JoinQuitListener implements Listener {
 							if(config.contains("users.verified.teamspeak." + c1.getUniqueIdentifier())) {
 								if(config.getString("users.verified.teamspeak." + c1.getUniqueIdentifier()).equalsIgnoreCase(uuid)) {
 									c = c1;
-									l.warn("found " + c1.getUniqueIdentifier());
 									break;
 								}
 							}
 						}
 						if(c != null) {
-							l.warn("NN");
 							if(!permmgr.checkMinecraft(c.getServerGroups(), uuid)) {
-								l.warn("U2D");
 								List<Integer> groups = new ArrayList<>();
 								for(int i : c.getServerGroups()) {
 									groups.add(i);
@@ -80,11 +72,8 @@ public class JoinQuitListener implements Listener {
 										}
 									}
 								}
-							}else {
-								l.warn("!U2D");
 							}
 						}else {
-							l.warn("N");
 							return;
 						}
 					} catch (InterruptedException e1) {
