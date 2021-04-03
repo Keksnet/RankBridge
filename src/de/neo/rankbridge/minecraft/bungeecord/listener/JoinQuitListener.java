@@ -1,5 +1,7 @@
 package de.neo.rankbridge.minecraft.bungeecord.listener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeService;
 import de.neo.rankbridge.shared.manager.GlobalManager;
@@ -64,10 +65,18 @@ public class JoinQuitListener implements Listener {
 							l.warn("NN");
 							if(!permmgr.checkMinecraft(c.getServerGroups(), uuid)) {
 								l.warn("U2D");
+								List<Integer> groups = new ArrayList<>();
 								for(int i : c.getServerGroups()) {
-									if(permmgr.isTeamspeakGroup(i)) {
+									groups.add(i);
+								}
+								for(int i : permmgr.getTSGroups()) {
+									if(groups.contains(i)) {
 										if(!mm.hasPermission(uuid, permmgr.getTeamspeakGroup(i))) {
 											mm.setPermission(uuid, permmgr.getTeamspeakGroup(i));
+										}
+									}else {
+										if(mm.hasPermission(uuid, permmgr.getTeamspeakGroup(i))) {
+											mm.unsetPermission(uuid, permmgr.getTeamspeakGroup(i));
 										}
 									}
 								}

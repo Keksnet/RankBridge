@@ -198,6 +198,15 @@ public class PermissionManager {
 	}
 	
 	/**
+	 * Returns the Teamspeakgroups in an array.
+	 * 
+	 * @return the TSGroups.
+	 */
+	public Integer[] getTSGroups() {
+		return (Integer[]) this.group_teamspeak.keySet().toArray();
+	}
+	
+	/**
 	 * Returns the Instance.
 	 * 
 	 * @return the instance.
