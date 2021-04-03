@@ -40,8 +40,9 @@ public class MessageReceivedListener extends ListenerAdapter {
 					Long guild = mgr.getLong("discord.guild");
 					Guild g = main.getJDA().getGuildById(guild);
 					g.addRoleToMember(g.getMember(e.getAuthor()), g.getRoleById(vars.get(0))).queue();
+					g.addRoleToMember(g.getMember(e.getAuthor()), g.getRoleById(MinecraftManager.getInstance().getLong("discord.verified_group"))).queue();
 					try {
-						String verified = mgr.getString("message.discord.verified").replace("%playername%", mgr.getName(vars.get(1)).replace("%uuid%", vars.get(1)));
+						String verified = mgr.getString("messages.discord.verified").replace("%playername%", mgr.getName(vars.get(1)).replace("%uuid%", vars.get(1)));
 						main.getJDA().openPrivateChannelById(e.getAuthor().getId()).complete().sendMessage(verified).complete();
 					}catch(ErrorResponseException e1) {
 						//nothing.
