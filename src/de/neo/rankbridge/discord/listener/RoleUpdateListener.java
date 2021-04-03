@@ -62,21 +62,25 @@ public class RoleUpdateListener extends ListenerAdapter {
 		if(mm.isMinecraftServiceRegistered()) {
 			if(mm.isRunningOnBungeecord()) {
 				Configuration config = (Configuration) mm.getConfig();
-				if(config.getBoolean("discord.external_sync")) {
-					PermissionManager permmgr = PermissionManager.getInstance();
-					for(Role r : e.getRoles()) {
-						if(permmgr.isDiscordRole(r.getIdLong())) {
-							mm.unsetPermission(config.getString("users.verified.discord." + e.getMember().getId()), permmgr.getDiscordGroup(r.getIdLong()));
+				if(config.contains("users.verified.discord." + e.getMember().getId())) {
+					if(config.getBoolean("discord.external_sync")) {
+						PermissionManager permmgr = PermissionManager.getInstance();
+						for(Role r : e.getRoles()) {
+							if(permmgr.isDiscordRole(r.getIdLong())) {
+								mm.unsetPermission(config.getString("users.verified.discord." + e.getMember().getId()), permmgr.getDiscordGroup(r.getIdLong()));
+							}
 						}
 					}
 				}
 			}else {
 				FileConfiguration config = (FileConfiguration) mm.getConfig();
-				if(config.getBoolean("discord.external_sync")) {
-					PermissionManager permmgr = PermissionManager.getInstance();
-					for(Role r : e.getRoles()) {
-						if(permmgr.isDiscordRole(r.getIdLong())) {
-							mm.unsetPermission(config.getString("users.verified.discord." + e.getMember().getId()), permmgr.getDiscordGroup(r.getIdLong()));
+				if(config.contains("users.verified.discord." + e.getMember().getId())) {
+					if(config.getBoolean("discord.external_sync")) {
+						PermissionManager permmgr = PermissionManager.getInstance();
+						for(Role r : e.getRoles()) {
+							if(permmgr.isDiscordRole(r.getIdLong())) {
+								mm.unsetPermission(config.getString("users.verified.discord." + e.getMember().getId()), permmgr.getDiscordGroup(r.getIdLong()));
+							}
 						}
 					}
 				}
