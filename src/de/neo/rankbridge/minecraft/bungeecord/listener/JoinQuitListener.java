@@ -3,6 +3,9 @@ package de.neo.rankbridge.minecraft.bungeecord.listener;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
@@ -33,6 +36,7 @@ public class JoinQuitListener implements Listener {
 	 */
 	@EventHandler
 	public void onSwitch(ServerConnectEvent e) {
+		Logger l = LoggerFactory.getLogger("TS-VER");
 		GlobalManager manager = GlobalManager.getInstance();
 		String uuid = e.getPlayer().getUniqueId().toString();
 		BungeeMain main = (BungeeMain) GlobalManager.getInstance().getServiceManager().getService(BungeeService.class).getExternalService().getMain();
@@ -50,12 +54,14 @@ public class JoinQuitListener implements Listener {
 							if(config.contains("users.verified.teamspeak." + c1.getUniqueIdentifier())) {
 								if(config.getString("users.verified.teamspeak." + c1.getUniqueIdentifier()).equalsIgnoreCase(uuid)) {
 									c = c1;
+									l.debug("found " + c1.getUniqueIdentifier());
 									break;
 								}
 							}
 						}
 						if(c != null) {
 							if(!permmgr.checkTeamspeak(c.getServerGroups(), uuid)) {
+								l.debug("U2D");
 								for(int i : c.getServerGroups()) {
 									if(permmgr.isTeamspeakGroup(i)) {
 										if(!mm.hasPermission(uuid, permmgr.getTeamspeakGroup(i))) {
@@ -63,6 +69,8 @@ public class JoinQuitListener implements Listener {
 										}
 									}
 								}
+							}else {
+								l.debug("!U2D");
 							}
 						}else {
 							return;
