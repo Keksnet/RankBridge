@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import de.neo.rankbridge.minecraft.MinecraftService;
 import de.neo.rankbridge.minecraft.bungeecord.BungeeMain;
@@ -202,8 +203,8 @@ public class PermissionManager {
 	 * 
 	 * @return the TSGroups.
 	 */
-	public Integer[] getTSGroups() {
-		return (Integer[]) this.group_teamspeak.keySet().toArray();
+	public Set<Integer> getTSGroups() {
+		return this.group_teamspeak.keySet();
 	}
 	
 	/**
